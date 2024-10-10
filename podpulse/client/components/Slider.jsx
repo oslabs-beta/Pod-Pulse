@@ -4,9 +4,10 @@ const Slider = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <div className='sliderBox'>
       <h3>{`${metric} Usage`}</h3>
+      <span className='sliderValue'>{`${value}%`}</span>
       <input
         type='range'
-        min='1'
+        min='0'
         max='100'
         value={value}
         className='slider'

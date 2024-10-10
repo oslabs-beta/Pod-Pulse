@@ -38,37 +38,42 @@ const App = () => {
   // console.log('Checking for consoles!');
   return (
     <div>
-      <Slider
-        metric='Memory'
-        value={memory}
-        onChange={setMemory}
-        timeFrame={memTimeFrame}
-        onTimeChange={setMemTimeFrame}
-      />
-      <Slider
-        metric='CPU'
-        value={cpu}
-        onChange={setCpu}
-        timeFrame={cpuTimeFrame}
-        onTimeChange={setCpuTimeFrame}
-      />
+      <div className='memoryContainer'>
+        <Slider
+          metric='Memory'
+          value={memory}
+          onChange={setMemory}
+          timeFrame={memTimeFrame}
+          onTimeChange={setMemTimeFrame}
+        />
+      </div>
+      <div className='cpuContainer'>
+        <Slider
+          metric='CPU'
+          value={cpu}
+          onChange={setCpu}
+          timeFrame={cpuTimeFrame}
+          onTimeChange={setCpuTimeFrame}
+        />
+      </div>
       <button id='saveButton' onClick={handleSubmit}>
         Save Config
       </button>
+      <div className='graphs'>
+        <Graph
+          title='Memory Usage'
+          graphHours={graphHours}
+          // graphHoursHandler={graphHoursHandler}
+          setGraphHours={setGraphHours}
+        />
 
-      <Graph
-        title='Memory Usage'
-        graphHours={graphHours}
-        // graphHoursHandler={graphHoursHandler}
-        setGraphHours={setGraphHours}
-      />
-
-      <Graph
-        title='CPU Usage'
-        graphHours={graphHours}
-        // graphHoursHandler={graphHoursHandler}
-        setGraphHours={setGraphHours}
-      />
+        <Graph
+          title='CPU Usage'
+          graphHours={graphHours}
+          // graphHoursHandler={graphHoursHandler}
+          setGraphHours={setGraphHours}
+        />
+      </div>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 const Graph = ({ title, graphHours, setGraphHours }) => {
   const [graphDisplay, setGraphDisplay] = useState('No Graph to display!');
+  
+  
   function selectDisplay(hours) {
     console.log(`selectDisplay func setting display to ${hours} hours!`);
     if (graphHours !== hours) setGraphHours(hours);

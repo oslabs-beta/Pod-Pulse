@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
-import Slider from './client/components/Slider';
+import Parameters from './client/components/Slider';
 import Graph from './client/components/Graph2';
 
 const App = () => {
@@ -53,14 +53,14 @@ const App = () => {
 
   return (
     <div>
-      <Slider
+      <Parameters
         metric='Memory'
         value={memory}
         onChange={setMemory}
         timeFrame={memTimeFrame}
         onTimeChange={setMemTimeFrame}
       />
-      <Slider
+      <Parameters
         metric='CPU'
         value={cpu}
         onChange={setCpu}

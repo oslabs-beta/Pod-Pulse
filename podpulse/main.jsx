@@ -2,16 +2,40 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-
 import './style.css';
 import Slider from './client/components/Slider';
-import Graph from './client/components/Graph';
+import Graph from './client/components/Graph2';
 
 const App = () => {
   const [memory, setMemory] = useState(0);
   const [memTimeFrame, setMemTimeFrame] = useState(1);
   const [cpu, setCpu] = useState(0);
   const [cpuTimeFrame, setCpuTimeFrame] = useState(1);
+
+  const [memoryData, setMemoryData] = useState([]);
+  const [cpuData, setCpuData] = useState([]);
+
+  const [graphMinutes, setGraphMinutes] = useState(60);
+
+  const fetchMemoryData = async () => {
+    const query = `sum(container_memory_usage_bytes) by (pod)`;
+    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    setMemoryData(data.data.result);
+  };
+
+  const fetchCpuData = async () => {
+    const query = `sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)`;
+    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`); 
+    const data = await res.json();
+    setCpuData(data.data.result)
+  };
+
+  useEffect(() => {
+    fetchMemoryData(graphMinutes);
+    fetchCpuData(graphMinutes);
+  }, [graphMinutes]);
+
 
   //function for submitting our new config
   const setConfiguration = async () => {
@@ -27,15 +51,6 @@ const App = () => {
     // setConfiguration();
   };
 
-  //function that shifts display based on selected hours
-  const [graphHours, setGraphHours] = useState();
-
-  // const graphHoursHandler = (hours) => {
-  //   console.log(`Handler setting graph to ${hours} hours`);
-  //   setGraphHours(hours);
-  // };
-
-  // console.log('Checking for consoles!');
   return (
     <div>
       <Slider
@@ -58,16 +73,16 @@ const App = () => {
 
       <Graph
         title='Memory Usage'
-        graphHours={graphHours}
-        // graphHoursHandler={graphHoursHandler}
-        setGraphHours={setGraphHours}
+        graphMinutes={graphMinutes}
+        setGraphMinutes={setGraphMinutes}
+        data={memoryData}
       />
 
       <Graph
         title='CPU Usage'
-        graphHours={graphHours}
-        // graphHoursHandler={graphHoursHandler}
-        setGraphHours={setGraphHours}
+        graphMinutes={graphMinutes}
+        setGraphMinutes={setGraphMinutes}
+        data={cpuData}
       />
     </div>
   );

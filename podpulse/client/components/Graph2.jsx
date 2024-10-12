@@ -1,104 +1,109 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Chart, registerables} from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 
 //registering all default components that may be used to create the graph but once we know exactly what we will use we can specify them directly to make it more optimized
 Chart.register(...registerables);
 
-const Graph = ({ title, graphHours, setGraphHours }) => {
-    const {graphDisplay, setGraphDisplay} = useState(null);
-  const [graphTitleDisplay, setGraphTitleDisplay] = useState('No Graph to display!');
+const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
+    const [graphDisplay, setGraphDisplay] = useState(null);
+    const [graphTitleDisplay, setGraphTitleDisplay] = useState('No Graph to display!');
 
-  //creates a mutable object to attach our graph to
-  const chartRef = useReff(null);
-  
-  
-  function selectDisplay(hours) {
-    console.log(`selectDisplay func setting display to ${hours} hours!`);
-    if (graphHours !== hours) setGraphHours(hours);
-  }
+    //creates a mutable object to attach our graph to
+    const chartRef = useRef(null);
 
-  // let graphDisplay = 'No Graph to display!';
-
-  useEffect(() => {
-    const fetchData = async () => {
-        const query = `sum(rate(container_cpu_usage_seconds_total[${graphHours}h])) by (pod)`;
-        const res = await fetch(INSERT URL FOR REQUEST);
-        const data = await response.json();
-        return data;
-    };
-
-    const renderChart = async () => {
-        const data = await fetchData();
-        if (!data) setGraphTitleDisplay('No Data Available');
-        return
-    };
-    const labels = data.map((item) => item.metric.pod);
-    const cpuUsages = data.map((item) => parseFloat(item.value[2]));
-
-    if (graphDisplay) graphDisplay.destroy();
-
-    const newGraphDisplay = new Chart(chartRef.current, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'CPU Usage',
-                data: cpuUsages,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-            }],
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true;
-                }
-            }
+    const selectDisplay = (mins) => {
+        console.log(`selectDisplay func setting display to ${mins} hours!`);
+        if (graphMinutes !== mins) {
+            setGraphMinutes(mins);
         }
-    })
-    setGraphDisplay(newGraphDisplay);
-};
-console.log(`Fetching data for ${graphHours} hours`);
-renderChart();
-  }, [graphHours]);
+    };
 
-  console.log(graphDisplay);
-  return (
-    <div>
-      {title}
-      <div>{graphDisplay}</div>
-      <form>
-        <button
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(24);
-          }}
-        >
-          24 Hours
-        </button>
-        <button
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(8);
-          }}
-        >
-          8 Hours
-        </button>
-        <button
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(1);
-          }}
-        >
-          Past Hour
-        </button>
-      </form>
-    </div>
-  );
+    useEffect(() => {
+     
+            if (!data) {
+                setGraphTitleDisplay('No Data Available');
+                return;
+            }
+
+            const labels = data.map((item) => item.metric.pod);
+            const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+
+            // we are destroying the previous chart instance if it exists
+            if (graphDisplay) {
+                graphDisplay.destroy();
+            }
+
+            const newGraphDisplay = new Chart(chartRef.current, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'CPU Usage',
+                        data: cpuUsages,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1,
+                    }],
+                },
+                options: {
+                    scales: {
+                        x: {
+                            ticks: {
+                                display: false,
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+
+            setGraphDisplay(newGraphDisplay); 
+            if (graphMinutes <= 60){
+                setGraphTitleDisplay(`Displaying ${title} data for the last ${graphMinutes/60} hour!`); 
+            } else {
+                setGraphTitleDisplay(`Displaying ${title} data for the last ${graphMinutes/60} hours!`); 
+            }
+            
+    }, [graphMinutes, data, title]); 
+
+    return (
+        <div>
+            <h2>{title}</h2>
+            <div>{graphTitleDisplay}</div> 
+            <canvas ref={chartRef} width="800" height="400"></canvas> 
+            <form>
+                <button
+                    className='timeDisplay'
+                    onClick={(e) => {
+                        e.preventDefault();
+                        selectDisplay(1440);
+                    }}
+                >
+                    24 Hours
+                </button>
+                <button
+                    className='timeDisplay'
+                    onClick={(e) => {
+                        e.preventDefault();
+                        selectDisplay(480);
+                    }}
+                >
+                    8 Hours
+                </button>
+                <button
+                    className='timeDisplay'
+                    onClick={(e) => {
+                        e.preventDefault();
+                        selectDisplay(60);
+                    }}
+                >
+                    1 Hour
+                </button>
+            </form>
+        </div>
+    );
 };
 
 export default Graph;

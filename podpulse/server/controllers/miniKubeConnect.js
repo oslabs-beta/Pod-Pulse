@@ -6,9 +6,9 @@ kubeConfigFile.loadFromDefault();
 
 const k8sApi = kubeConfigFile.makeApiClient(k8s.CoreV1Api);
 
-const k8Controller = {}; // Controller object to eventually hold methods
+const miniKubeController = {}; // Controller object to eventually hold methods
 
-k8Controller.getPods = async (req, res, next) => {
+miniKubeController.getPods = async (req, res, next) => {
   try {
       const response = await k8sApi.listPodForAllNamespaces();
       response.body.items.forEach((pod) => {
@@ -19,26 +19,25 @@ k8Controller.getPods = async (req, res, next) => {
   }
 };
 
-k8Controller.deletePod = async (req, res, next) => {
+miniKubeController.deletePod = async (req, res, next) => {
+    const { podName, podNamespace } = req.body;
   try {
-      const res = await k8sApi.deleteNamespacedPod(res.locals.podName, res.locals.podNamespace);
-          console.log(`${podName} was deleted`, res.body);
-      }
-  catch (err) {
+      const res = await k8sApi.deleteNamespacedPod(podName, podNamespace);
+      console.log(`${podName} was deleted`, res.body);
+      return next();
+  } catch (err) {
       console.log(`Error deleting pod: ${JSON.stringify(err)}`);
   }
 }
 
-
-
 async function getPods() {
   try {
-      const res = await k8sApi.listPodForAllNamespaces();
-      res.body.items.forEach((pod) => {
-          console.log(`${pod.metadata.namespace} - ${pod.metadata.name}`)
-      })
+    const res = await k8sApi.listPodForAllNamespaces();
+    res.body.items.forEach((pod) => {
+      console.log(`${pod.metadata.namespace} - ${pod.metadata.name}`)
+    })
   } catch (err){
-      console.log(`Error getting pods: ${err}`)
+    console.log(`Error getting pods: ${err}`)
   }
 };
 
@@ -53,3 +52,6 @@ async function deletePod(podName, podNamespace){
 }
 
 deletePod('prometheus-grafana-57c485fc8c-zzx7d', 'default');
+
+
+export default miniKubeController;

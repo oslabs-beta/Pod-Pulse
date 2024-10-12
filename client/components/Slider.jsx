@@ -1,13 +1,16 @@
 import React from 'react';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 
-const Slider = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
+const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
-    <div className='sliderBox'>
+    <Box className='sliderBox' sx={{ width: '300px'}}>
       <h3>{`${metric} Usage`}</h3>
-      <input
-        type='range'
-        min='1'
-        max='100'
+      <Slider
+        sx={{width: '150px'}}
+        defaultValue={50}
+        aria-label='Small'
+        valueLabelDisplay='auto'
         value={value}
         className='slider'
         id='myRange'
@@ -22,8 +25,8 @@ const Slider = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
         id='timeFrame'
         onChange={(e) => onTimeChange(e.target.value)}
       />
-    </div>
+      </Box>
   );
 };
 
-export default Slider;
+export default Parameters;

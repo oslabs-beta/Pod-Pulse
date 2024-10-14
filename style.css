@@ -42,6 +42,7 @@ h1 {
   text-align: center;
 }
 
+<<<<<<< HEAD:podpulse/style.css
 #timeFrame {
   margin-bottom: 20px;
 }
@@ -50,12 +51,30 @@ h1 {
   border: 1px solid white;
   margin: 20px;
   border-radius: 5px;
+=======
+.sliderBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+>>>>>>> dev:style.css
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.vanilla:hover {
   filter: drop-shadow(0 0 2em #f7df1eaa);
+}
+
+#paramBox {
+  display: flex;
+  justify-content: space-around;
 }
 
 .card {

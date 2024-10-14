@@ -1,14 +1,24 @@
 import React from 'react';
+import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box';
 
-const Slider = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
+const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
-    <div className='sliderBox'>
+    <Box className='sliderBox' sx={{ width: '300px'}}>
       <h3>{`${metric} Usage`}</h3>
+<<<<<<< HEAD:podpulse/client/components/Slider.jsx
       <span className='sliderValue'>{`${value}%`}</span>
       <input
         type='range'
         min='0'
         max='100'
+=======
+      <Slider
+        sx={{ color: '#c9c7e1', width: '150px'}}
+        defaultValue={50}
+        aria-label='Small'
+        valueLabelDisplay='auto'
+>>>>>>> dev:client/components/Slider.jsx
         value={value}
         className='slider'
         id='myRange'
@@ -23,8 +33,8 @@ const Slider = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
         id='timeFrame'
         onChange={(e) => onTimeChange(e.target.value)}
       />
-    </div>
+    </Box>
   );
 };
 
-export default Slider;
+export default Parameters;

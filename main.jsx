@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
-import Slider from './client/components/Slider';
+import ParameterContainer from './client/components/ParameterContainer';
 import Graph from './client/components/Graph2';
 
 const App = () => {
@@ -62,6 +62,7 @@ const App = () => {
 
   return (
     <div>
+<<<<<<< HEAD:podpulse/main.jsx
       <div className='memoryContainer'>
         <Slider
           metric='Memory'
@@ -80,6 +81,17 @@ const App = () => {
           onTimeChange={setCpuTimeFrame}
         />
       </div>
+=======
+      <ParameterContainer 
+        memory={memory}
+        setMemory={setMemory}
+        memTimeFrame={memTimeFrame}
+        cpu={cpu}
+        setCpu={setCpu}
+        cpuTimeFrame={cpuTimeFrame} 
+        setCpuTimeFrame={setCpuTimeFrame}
+      />
+>>>>>>> dev:main.jsx
       <button id='saveButton' onClick={handleSubmit}>
         Save Config
       </button>

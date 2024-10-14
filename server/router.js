@@ -3,6 +3,7 @@ const path = require('path');
 const app = express();
 const PORT = 3333;
 const fs = require('fs');
+const queryController = require('./controllers/prometheusController');
 
 const deletedPods = require('./controllers/prometheusController.js');
 
@@ -17,6 +18,27 @@ app.get('/', (req, res) => {
 app.get('/deleted', (req, res) => {
   res.status(200).json(deletedPods);
 });
+// Route to handle the configuration from the frontend
+// app.post('/config', async (req, res) => {
+//   try {
+//     // deconstruct the configuration data from the request body
+//     const { memory, memTimeFrame, cpu, cpuTimeFrame } = req.body;
+
+//     console.log('Received client configuration:', {
+//       memory,
+//       memTimeFrame,
+//       cpu,
+//       cpuTimeFrame,
+//     });
+
+
+//     // ??Send the results back to the frontend - this needs to be adjusted based on how the data is manipulated after the query??
+//     res.status(200).json({ cpuResults, memoryResults });
+//   } catch (error) {
+//     console.error('Error processing configuration:', error);
+//     res.status(500).json({ error: 'Failed to process configuration' });
+//   }
+// });
 
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');

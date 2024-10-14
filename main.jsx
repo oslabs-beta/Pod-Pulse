@@ -35,7 +35,7 @@ const App = () => {
     `;
     const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
     const data = await res.json();
-    setCpuData(data.data.result)
+    setCpuData(data.data.result);
   };
 
   useEffect(() => {
@@ -43,29 +43,66 @@ const App = () => {
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
 
+  // SAMPLE CLIENT DATA:
+  // {
+  //   "memory": 1024,
+  //   "memTimeFrame": 30,
+  //   "cpu": 4,
+  //   "cpuTimeFrame": 15
+  // }
 
   //function for submitting our new config
-  const setConfiguration = async () => {
-    //this is where we send data to ???
+  const setConfiguration = async (memory, memTimeFrame, cpu, cpuTimeFrame) => {
+    try {
+      //deconstructing to get values
+      const config = {
+        memory,
+        memTimeFrame,
+        cpu,
+        cpuTimeFrame,
+      };
+      // promise waiting on the fetch requst to the endpoint
+      const response = await fetch('http://localhost:3333/config', {
+        //post request from client side sends data to the server
+        method: 'POST',
+        // indicating that we are sending JSON data from client
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // convert the javascript object into a string
+        body: JSON.stringify(config),
+      });
+      // if there is something wrong with the response
+      if (!response.ok) {
+        throw new Error('Failed to send configuration');
+      }
+      // parse the json reponse - What will we be responding with??
+      const result = await response.json();
+      console.log('Configuration saved successfully:', result);
+      // error handler
+    } catch (error) {
+      console.error('Error sending configuration:', error);
+    }
   };
 
   //function that runs when we click the submit button
   const handleSubmit = () => {
-    console.log(`Memory: ${memory}`);
-    console.log(`Memory TimeFrame: ${memTimeFrame}`);
-    console.log(`CPU: ${cpu}`);
-    console.log(`CPU TimeFrame: ${cpuTimeFrame}`);
-    // setConfiguration();
+    console.log(`Memory: ${memory}, TimeFrame: ${memTimeFrame}`);
+    console.log(`CPU: ${cpu}, TimeFrame: ${cpuTimeFrame}`);
+    //invoke the set configuration function passing in the client submitted fields
+    setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
   return (
     <div>
+      <ParameterContainer
       <ParameterContainer
         memory={memory}
         setMemory={setMemory}
         memTimeFrame={memTimeFrame}
         cpu={cpu}
         setCpu={setCpu}
+        cpuTimeFrame={cpuTimeFrame}
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
       />

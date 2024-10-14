@@ -9,7 +9,7 @@ console.log('Prometheus Controller Running!');
 const cpuMinutes = 30;
 
 // how often server will query PromQL for server performance metrics
-const callInterval = 0.15;
+// const callInterval = 0.15;
 
 // const memoryMinutes = 30;
 

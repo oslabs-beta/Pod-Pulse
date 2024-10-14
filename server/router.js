@@ -3,7 +3,9 @@ const path = require('path');
 const app = express();
 const PORT = 3333;
 const fs = require('fs');
+
 // import miniKubeController from './controllers/miniKubeConnect'
+const queryController = require('./controllers/prometheusController.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -39,8 +41,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-
-
-
-///

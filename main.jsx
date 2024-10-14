@@ -18,15 +18,22 @@ const App = () => {
   const [graphMinutes, setGraphMinutes] = useState(60);
 
   const fetchMemoryData = async () => {
-    const query = `sum(container_memory_usage_bytes) by (pod)`;
+    // const query = `sum(container_memory_usage_bytes) by (pod)`;
+    const query = `avg_over_time(container_memory_usage_bytes[${graphMinutes}m]) by (pod) /
+    sum(kube_pod_container_resource_requests_memory_bytes{pod=~".+"}) by (pod) * 100
+    `;
     const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
     const data = await res.json();
     setMemoryData(data.data.result);
   };
 
   const fetchCpuData = async () => {
-    const query = `sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)`;
-    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`); 
+    // const query = `sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)`;
+    const query = `
+    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
+    sum(kube_pod_container_resource_requests_cpu_cores{pod=~".+"}) by (pod) * 100
+    `;
+    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
     const data = await res.json();
     setCpuData(data.data.result)
   };
@@ -53,13 +60,13 @@ const App = () => {
 
   return (
     <div>
-      <ParameterContainer 
+      <ParameterContainer
         memory={memory}
         setMemory={setMemory}
         memTimeFrame={memTimeFrame}
         cpu={cpu}
         setCpu={setCpu}
-        cpuTimeFrame={cpuTimeFrame} 
+        cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
       />
       <button id='saveButton' onClick={handleSubmit}>

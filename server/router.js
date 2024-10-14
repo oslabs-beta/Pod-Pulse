@@ -4,8 +4,7 @@ const app = express();
 const PORT = 3333;
 const fs = require('fs');
 
-// import miniKubeController from './controllers/miniKubeConnect'
-const queryController = require('./controllers/prometheusController.js');
+const deletedPods = require('./controllers/prometheusController.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,11 +14,9 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
 });
 
-// app.post('/delete', miniKubeController.deletePod, (req, res) => {
-//   return res.sendStatus(204);
-// })
-
-
+app.get('/deleted', (req, res) => {
+  res.status(200).json(deletedPods);
+});
 
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');

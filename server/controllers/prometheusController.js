@@ -9,13 +9,13 @@ console.log('Prometheus Controller Running!');
 const cpuMinutes = 30;
 
 // how often server will query PromQL for server performance metrics
-const callInterval = 0.15;
+// const callInterval = 0.15;
 
-// const memoryMinutes = 30;
+const memoryMinutes = 30;
 
 const cpuThreshold = 0.02; //FIX THIS LATER
 
-// const memoryThreshold = ;  //FIX THIS LATER
+const memoryThreshold = ;  //FIX THIS LATER
 
 const cpuQuery = `sum(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod, namespace)`;
 
@@ -65,22 +65,22 @@ queryController.sendCPUQuery = async () => {
   }
 };
 
-// queryController.sendMemoryQuery = async () => {
-//   try {
-//     console.log('In sendMemoryQuery');
-//     const cpuUrl = `${prometheusUrl}${encodeURIComponent(memoryQuery)}`;
-//     const response = await fetch(cpuUrl);
-//     const memoryData = await response.json();
-//     if (memoryData.status === 'success') {
-//       console.log('PromQL memory data:', memoryData.data.result);
-//     } else {
-//       console.error('PromQL memory query failed:', memoryData.error);
-//     }
-//   } catch (err) {
-//     console.error('Error sending PromQL memory query:', err);
-//     return next(err);
-//   }
-// };
+queryController.sendMemoryQuery = async () => {
+  try {
+    console.log('In sendMemoryQuery');
+    const cpuUrl = `${prometheusUrl}${encodeURIComponent(memoryQuery)}`;
+    const response = await fetch(cpuUrl);
+    const memoryData = await response.json();
+    if (memoryData.status === 'success') {
+      console.log('PromQL memory data:', memoryData.data.result);
+    } else {
+      console.error('PromQL memory query failed:', memoryData.error);
+    }
+  } catch (err) {
+    console.error('Error sending PromQL memory query:', err);
+    return next(err);
+  }
+};
 
 setInterval(() => {
   queryController.sendCPUQuery();

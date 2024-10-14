@@ -3,9 +3,8 @@ const path = require('path');
 const app = express();
 const PORT = 3333;
 const fs = require('fs');
+const queryController = require('./controllers/prometheusController');
 
-// import miniKubeController from './controllers/miniKubeConnect'
-const queryController = require('./controllers/prometheusController.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -15,11 +14,27 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
 });
 
-// app.post('/delete', miniKubeController.deletePod, (req, res) => {
-//   return res.sendStatus(204);
-// })
+// Route to handle the configuration from the frontend
+// app.post('/config', async (req, res) => {
+//   try {
+//     // deconstruct the configuration data from the request body
+//     const { memory, memTimeFrame, cpu, cpuTimeFrame } = req.body;
+
+//     console.log('Received client configuration:', {
+//       memory,
+//       memTimeFrame,
+//       cpu,
+//       cpuTimeFrame,
+//     });
 
 
+//     // ??Send the results back to the frontend - this needs to be adjusted based on how the data is manipulated after the query??
+//     res.status(200).json({ cpuResults, memoryResults });
+//   } catch (error) {
+//     console.error('Error processing configuration:', error);
+//     res.status(500).json({ error: 'Failed to process configuration' });
+//   }
+// });
 
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');
@@ -41,3 +56,5 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
+
+module.exports = router;

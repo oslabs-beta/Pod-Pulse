@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import './style.css';
-import Parameters from './client/components/Slider';
+import ParameterContainer from './client/components/ParameterContainer';
 import Graph from './client/components/Graph2';
 
 const App = () => {
@@ -53,19 +53,14 @@ const App = () => {
 
   return (
     <div>
-      <Parameters
-        metric='Memory'
-        value={memory}
-        onChange={setMemory}
-        timeFrame={memTimeFrame}
-        onTimeChange={setMemTimeFrame}
-      />
-      <Parameters
-        metric='CPU'
-        value={cpu}
-        onChange={setCpu}
-        timeFrame={cpuTimeFrame}
-        onTimeChange={setCpuTimeFrame}
+      <ParameterContainer 
+        memory={memory}
+        setMemory={setMemory}
+        memTimeFrame={memTimeFrame}
+        cpu={cpu}
+        setCpu={setCpu}
+        cpuTimeFrame={cpuTimeFrame} 
+        setCpuTimeFrame={setCpuTimeFrame}
       />
       <button id='saveButton' onClick={handleSubmit}>
         Save Config

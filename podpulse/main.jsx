@@ -18,7 +18,10 @@ const App = () => {
   const [graphMinutes, setGraphMinutes] = useState(60);
 
   const fetchMemoryData = async () => {
-    const query = `sum(container_memory_usage_bytes) by (pod)`;
+    const query = `
+    sum(container_memory_usage_bytes) by (pod) /
+    sum(kube_pod_container_resource_requests_memory_bytes) by (pod) * 100
+  `;
     const res = await fetch(
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
     );
@@ -27,7 +30,10 @@ const App = () => {
   };
 
   const fetchCpuData = async () => {
-    const query = `sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)`;
+    const query = `
+    sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod) /
+    sum(kube_pod_container_resource_requests_cpu_cores) by (pod) * 100
+  `;
     const res = await fetch(
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
     );
@@ -78,13 +84,6 @@ const App = () => {
         Save Config
       </button>
       <div className='graphs'>
-        <Graph
-          title='Memory Usage'
-          graphHours={graphHours}
-          // graphHoursHandler={graphHoursHandler}
-          setGraphHours={setGraphHours}
-        />
-
         <Graph
           title='Memory Usage'
           graphMinutes={graphMinutes}

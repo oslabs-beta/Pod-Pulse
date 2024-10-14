@@ -7,7 +7,7 @@ const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
     <Box className='sliderBox' sx={{ width: '300px'}}>
       <h3>{`${metric} Usage`}</h3>
       <Slider
-        sx={{width: '150px'}}
+        sx={{ color: '#c9c7e1', width: '150px'}}
         defaultValue={50}
         aria-label='Small'
         valueLabelDisplay='auto'
@@ -25,7 +25,7 @@ const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
         id='timeFrame'
         onChange={(e) => onTimeChange(e.target.value)}
       />
-      </Box>
+    </Box>
   );
 };
 

@@ -17,6 +17,7 @@ const App = () => {
 
   const [graphMinutes, setGraphMinutes] = useState(60);
 
+  //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
     const query = `
     sum(container_memory_usage_bytes) by (pod) /
@@ -29,11 +30,12 @@ const App = () => {
     setMemoryData(data.data.result);
   };
 
+  //fetch cpu data to be displayed in graph
   const fetchCpuData = async () => {
     const query = `
-    sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod) /
-    sum(kube_pod_container_resource_requests_cpu_cores) by (pod) * 100
-  `;
+    avg(rate(container_cpu_usage_seconds_total[${graphMinute}m])) by (pod)
+ * 100
+    `;
     const res = await fetch(
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
     );
@@ -46,52 +48,25 @@ const App = () => {
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
 
-  //function for submitting our new config
-  const setConfiguration = async () => {
-    //this is where we send data to ???
-  };
-
-  //function that runs when we click the submit button
+  //function that sends the collected data to backend when we click the submit button
   const handleSubmit = () => {
     console.log(`Memory: ${memory}`);
     console.log(`Memory TimeFrame: ${memTimeFrame}`);
     console.log(`CPU: ${cpu}`);
     console.log(`CPU TimeFrame: ${cpuTimeFrame}`);
-    // setConfiguration();
   };
 
   return (
     <div>
-<<<<<<< HEAD:podpulse/main.jsx
-      <div className='memoryContainer'>
-        <Slider
-          metric='Memory'
-          value={memory}
-          onChange={setMemory}
-          timeFrame={memTimeFrame}
-          onTimeChange={setMemTimeFrame}
-        />
-      </div>
-      <div className='cpuContainer'>
-        <Slider
-          metric='CPU'
-          value={cpu}
-          onChange={setCpu}
-          timeFrame={cpuTimeFrame}
-          onTimeChange={setCpuTimeFrame}
-        />
-      </div>
-=======
-      <ParameterContainer 
+      <ParameterContainer
         memory={memory}
         setMemory={setMemory}
         memTimeFrame={memTimeFrame}
         cpu={cpu}
         setCpu={setCpu}
-        cpuTimeFrame={cpuTimeFrame} 
+        cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
       />
->>>>>>> dev:main.jsx
       <button id='saveButton' onClick={handleSubmit}>
         Save Config
       </button>

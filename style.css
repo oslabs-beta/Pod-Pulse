@@ -61,6 +61,11 @@ h1 {
   filter: drop-shadow(0 0 2em #f7df1eaa);
 }
 
+#paramBox {
+  display: flex;
+  justify-content: space-around;
+}
+
 .card {
   padding: 2em;
 }

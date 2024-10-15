@@ -19,10 +19,10 @@ const App = () => {
 
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
-    const query = `
-    sum(container_memory_usage_bytes) by (pod) /
-    sum(kube_pod_container_resource_requests_memory_bytes) by (pod) * 100
-  `;
+    const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
+    / 
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
+    `;
     const res = await fetch(
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
     );
@@ -33,8 +33,8 @@ const App = () => {
   //fetch cpu data to be displayed in graph
   const fetchCpuData = async () => {
     const query = `
-    avg(rate(container_cpu_usage_seconds_total[${graphMinute}m])) by (pod)
- * 100
+    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/ 
+    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `;
     const res = await fetch(
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`

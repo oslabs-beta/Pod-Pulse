@@ -47,7 +47,8 @@ async function deletePod(podName, podNamespace) {
     const res = await k8sApi.deleteNamespacedPod(podName, podNamespace);
     // console.log(`${podName} was deleted`, res.body);
   } catch (err) {
-    console.log(`Error deleting pod: ${JSON.stringify(err)}`);
+    console.log('error deleting pod')
+    // console.log(`Error deleting pod: ${JSON.stringify(err)}`);
   }
 }
 

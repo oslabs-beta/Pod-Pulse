@@ -9,7 +9,7 @@ console.log('Prometheus Controller Running!');
 const cpuMinutes = 30;
 
 // how often server will query PromQL for server performance metrics
-// const callInterval = 0.15;
+const callInterval = 0.15;
 
 // const memoryMinutes = 30;
 
@@ -38,9 +38,9 @@ const queryPrometheus = async (queryObj) => {
   // console.log(data.statuspod);
   if (data.status === 'success') {
     const results = await data.data.result;
-    console.log('PromQL data:', results);
+    console.log(`PromQL ${label} data array:`, results);
     results.forEach((pod) => {
-      console.log('Data', pod.value[1]);
+      console.log(`Pod ${label} data: ${pod.metric.pod}`, pod.value[1]);
       if (pod.value[1] > threshold) {
         console.log(
           `${pod.metric.pod} pod ${label} usage of ${

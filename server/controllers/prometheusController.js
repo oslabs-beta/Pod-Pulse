@@ -38,14 +38,14 @@ const queryPrometheus = async (queryObj) => {
   // console.log(data.statuspod);
   if (data.status === 'success') {
     const results = await data.data.result;
-    console.log('PromQL data array:', results);
+    console.log(`PromQL ${label} data array:`, results);
     results.forEach((pod) => {
       console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
-      if (pod.value[1] > threshold) {
+      if (pod.value[1] > threshold && pod.metric.pod !== 'prometheus-prometheus-kube-prometheus-prometheus-0') {
         console.log(
           `${pod.metric.pod} pod ${label} usage of ${
-            Math.floor(pod.value[1] * 10000) / 100
-          }% exceeds threshold of ${threshold * 100}%. Deleting ${
+            Math.floor(pod.value[1]) / 100
+          }% exceeds threshold of ${threshold}%. Deleting ${
             pod.metric.pod
           }`
         );
@@ -57,7 +57,7 @@ const queryPrometheus = async (queryObj) => {
           value: pod.value[1],
           threshold: threshold,
         });
-        console.log(deletedPods);
+        // console.log(deletedPods);
         deletePod(pod.metric.pod, pod.metric.namespace);
         // } else {
         // console.log(
@@ -153,7 +153,7 @@ configController.saveConfig = (req, res, next) => {
 
 setInterval(() => {
   queryPrometheus(cpuUsage);
-  // queryPrometheus(memoryUsage);
+  queryPrometheus(memoryUsage);
 }, 1000 * 60 * callInterval);
 
 module.exports = { deletedPods, configController };

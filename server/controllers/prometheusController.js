@@ -11,7 +11,7 @@ let cpuMinutes = 30;
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.15;
 
-// const memoryMinutes = 30;
+let memoryMinutes = 30;
 
 const queryController = {};
 
@@ -53,9 +53,9 @@ const queryPrometheus = async (queryObj) => {
           timestamp: new Date(),
           namespace: pod.metric.namespace,
           podName: pod.metric.pod,
-          label: label,
+          label,
           value: pod.value[1],
-          threshold: threshold,
+          threshold,
         });
         console.log(deletedPods);
         deletePod(pod.metric.pod, pod.metric.namespace);
@@ -76,16 +76,19 @@ const configController = {};
 
 configController.saveConfig = (req, res, next) => {
   try {
-    const { memory, cpu, cpuTimeFrame } = req.body;
+    const { memory, memoryTimeFrame ,cpu, cpuTimeFrame } = req.body;
     cpuUsage.threshold = cpu;
     memoryUsage.threshold = memory;
     cpuMinutes = cpuTimeFrame;
+    memoryMinutes = memoryTimeFrame;
     res.locals.savedConfig = {
       cpuThreshold: cpuUsage.threshold,
       memoryThreshold: memoryUsage.threshold,
       cpuMinutes,
+      memoryMinutes,
     };
     console.log(res.locals.savedConfig);
+    prometheusQueries();
     return next();
   } catch (err) {
     return next(err);
@@ -151,9 +154,11 @@ configController.saveConfig = (req, res, next) => {
 //   }
 // };
 
-setInterval(() => {
+const prometheusQueries = () => {
   queryPrometheus(cpuUsage);
   // queryPrometheus(memoryQuery);
-}, 1000 * 60 * callInterval);
+}
+
+setInterval(prometheusQueries, 1000 * 60 * callInterval);
 
 module.exports = { deletedPods, configController };

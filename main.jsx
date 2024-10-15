@@ -103,6 +103,7 @@ const App = () => {
         setCpu={setCpu}
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
+        setMemTimeFrame={setMemTimeFrame}
       />
       <button id='saveButton' onClick={handleSubmit}>
         Save Config

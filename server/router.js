@@ -4,7 +4,10 @@ const app = express();
 const PORT = 3333;
 const fs = require('fs');
 
-const { deletedPods, configController } = require('./controllers/prometheusController.js');
+const {
+  deletedPods,
+  configController,
+} = require('./controllers/prometheusController.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +22,7 @@ app.get('/deleted', (req, res) => {
 });
 // Route to handle the configuration from the frontend
 app.post('/config', configController.saveConfig, (req, res) => {
-    res.status(201).json(res.locals.savedConfig);
+  res.status(201).json(res.locals.savedConfig);
 });
 
 app.use('*', (req, res) => {

@@ -96,13 +96,11 @@ const App = () => {
   return (
     <div>
       <ParameterContainer
-      <ParameterContainer
         memory={memory}
         setMemory={setMemory}
         memTimeFrame={memTimeFrame}
         cpu={cpu}
         setCpu={setCpu}
-        cpuTimeFrame={cpuTimeFrame}
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
       />

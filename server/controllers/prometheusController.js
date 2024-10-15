@@ -23,7 +23,7 @@ const cpuUsage = {
     avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod)/
     sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `,
-  threshold: 60,
+  threshold: 100,
 };
 
 const memoryUsage = {
@@ -32,7 +32,7 @@ const memoryUsage = {
     /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
     `,
-  threshold: 60,
+  threshold: 1,
 };
 
 const queryPrometheus = async (queryObj) => {

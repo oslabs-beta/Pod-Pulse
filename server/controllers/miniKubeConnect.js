@@ -6,7 +6,8 @@ kubeConfigFile.loadFromDefault();
 
 const k8sApi = kubeConfigFile.makeApiClient(k8s.CoreV1Api);
 
-const miniKubeController = {}; // Controller object to eventually hold methods
+//// miniKubeController not currently in use as not used with any requests.
+// const miniKubeController = {}; // Controller object to eventually hold methods
 
 // miniKubeController.getPods = async (req, res, next) => {
 //   try {
@@ -44,7 +45,7 @@ async function getPods() {
 async function deletePod(podName, podNamespace) {
   try {
     const res = await k8sApi.deleteNamespacedPod(podName, podNamespace);
-    console.log(`${podName} was deleted`, res.body);
+    // console.log(`${podName} was deleted`, res.body);
   } catch (err) {
     console.log(`Error deleting pod: ${JSON.stringify(err)}`);
   }

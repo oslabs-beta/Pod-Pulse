@@ -3,7 +3,11 @@ const path = require('path');
 const app = express();
 const PORT = 3333;
 const fs = require('fs');
-// import miniKubeController from './controllers/miniKubeConnect'
+
+const {
+  deletedPods,
+  configController,
+} = require('./controllers/prometheusController.js');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -13,9 +17,13 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.resolve(__dirname, '../index.html'));
 });
 
-// app.post('/delete', miniKubeController.deletePod, (req, res) => {
-//   return res.sendStatus(204);
-// })
+app.get('/deleted', (req, res) => {
+  res.status(200).json(deletedPods);
+});
+// Route to handle the configuration from the frontend
+app.post('/config', configController.saveConfig, (req, res) => {
+  res.status(201).json(res.locals.savedConfig);
+});
 
 app.use('*', (req, res) => {
   res.status(404).send('Page not found');
@@ -37,5 +45,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-
-///

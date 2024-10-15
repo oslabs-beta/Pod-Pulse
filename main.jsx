@@ -17,24 +17,30 @@ const App = () => {
 
   const [graphMinutes, setGraphMinutes] = useState(60);
 
+  //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
-    // const query = `sum(container_memory_usage_bytes) by (pod)`;
-    const query = `avg_over_time(container_memory_usage_bytes[${graphMinutes}m]) by (pod) /
-    sum(kube_pod_container_resource_requests_memory_bytes{pod=~".+"}) by (pod) * 100
+    const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
+    / 
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
     `;
-    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
+    const res = await fetch(
+      `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
+    );
     const data = await res.json();
     setMemoryData(data.data.result);
   };
 
+  //fetch cpu data to be displayed in graph
   const fetchCpuData = async () => {
-    // const query = `sum(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)`;
     const query = `
-    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
-    sum(kube_pod_container_resource_requests_cpu_cores{pod=~".+"}) by (pod) * 100
+    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/ 
+    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `;
-    const res = await fetch(`http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`);
+    const res = await fetch(
+      `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
+    );
     const data = await res.json();
+    setCpuData(data.data.result);
     setCpuData(data.data.result);
   };
 
@@ -107,20 +113,21 @@ const App = () => {
       <button id='saveButton' onClick={handleSubmit}>
         Save Config
       </button>
+      <div className='graphs'>
+        <Graph
+          title='Memory Usage'
+          graphMinutes={graphMinutes}
+          setGraphMinutes={setGraphMinutes}
+          data={memoryData}
+        />
 
-      <Graph
-        title='Memory Usage'
-        graphMinutes={graphMinutes}
-        setGraphMinutes={setGraphMinutes}
-        data={memoryData}
-      />
-
-      <Graph
-        title='CPU Usage'
-        graphMinutes={graphMinutes}
-        setGraphMinutes={setGraphMinutes}
-        data={cpuData}
-      />
+        <Graph
+          title='CPU Usage'
+          graphMinutes={graphMinutes}
+          setGraphMinutes={setGraphMinutes}
+          data={cpuData}
+        />
+      </div>
     </div>
   );
 };

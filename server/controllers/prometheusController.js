@@ -11,7 +11,7 @@ let cpuMinutes = 30;
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
 
-// const memoryMinutes = 30;
+const memoryMinutes = 30;
 
 const queryController = {};
 
@@ -19,14 +19,20 @@ const deletedPods = [];
 
 const cpuUsage = {
   label: 'CPU',
-  queryString: `sum(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod, namespace)`,
-  threshold: 0.8,
+  queryString: `
+    avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod)/
+    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
+    `,
+  threshold: 60,
 };
 
 const memoryUsage = {
   label: 'Memory',
-  queryString: `sum(container_memory_working_set_bytes) by (pod, namespace)`,
-  threshold: 100,
+  queryString: `sum(avg_over_time(container_memory_usage_bytes[${memoryMinutes}m])) by (pod)
+    /
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
+    `,
+  threshold: 60,
 };
 
 const queryPrometheus = async (queryObj) => {

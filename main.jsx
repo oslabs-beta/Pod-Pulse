@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import Graph from './client/components/Graph2';
+import DeletedPodTable from '/client/components/DeletedPodTable';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -150,6 +151,7 @@ const App = () => {
           data={cpuData}
         />
       </div>
+      <DeletedPodTable deletedPods={deletedPods} />
     </div>
   );
 };

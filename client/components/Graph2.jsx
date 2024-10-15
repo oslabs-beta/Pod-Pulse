@@ -26,8 +26,17 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       return;
     }
 
-    const labels = data.map((item) => item.metric.pod);
-    const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+    const combinedData = data.map((item, index) => ({
+      pod: item.metric.pod,
+      usage: parseFloat(item.value[1]),
+    }));
+
+    const sortedData = combinedData.sort((a,b) => a.pod.localeCompare(b.pod));
+
+
+
+    const labels = sortedData.map((item) => item.pod);
+    const cpuUsages = sortedData.map((item) => item.usage);
     const barColors = cpuUsages.map((value) => {
       if (value >= 100) return 'rgba(255,0,0,0.2)';
       else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';

@@ -6,7 +6,7 @@ const deletePod = require('./miniKubeConnect');
 
 console.log('Prometheus Controller Running!');
 
-const cpuMinutes = 30;
+let cpuMinutes = 30;
 
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
@@ -59,7 +59,7 @@ const queryPrometheus = async (queryObj) => {
         });
         console.log(deletedPods);
         deletePod(pod.metric.pod, pod.metric.namespace);
-      } else {
+        // } else {
         // console.log(
         //   `${pod.metric.pod} ${label} usage of ${
         //     Math.floor(pod.value[1] * 10000) / 100
@@ -69,6 +69,26 @@ const queryPrometheus = async (queryObj) => {
     });
   } else {
     console.error(`PromQL ${label} query failed:`, data.error);
+  }
+};
+
+const configController = {};
+
+configController.saveConfig = (req, res, next) => {
+  try {
+    const { memory, cpu, cpuTimeFrame } = req.body;
+    cpuUsage.threshold = cpu;
+    memoryUsage.threshold = memory;
+    cpuMinutes = cpuTimeFrame;
+    res.locals.savedConfig = {
+      cpuThreshold: cpuUsage.threshold,
+      memoryThreshold: memoryUsage.threshold,
+      cpuMinutes,
+    };
+    console.log(res.locals.savedConfig);
+    return next();
+  } catch (err) {
+    return next(err);
   }
 };
 
@@ -136,4 +156,4 @@ setInterval(() => {
   // queryPrometheus(memoryQuery);
 }, 1000 * 60 * callInterval);
 
-module.exports = deletedPods;
+module.exports = { deletedPods, configController };

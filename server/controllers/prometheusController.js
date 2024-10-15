@@ -9,7 +9,7 @@ console.log('Prometheus Controller Running!');
 let cpuMinutes = 30;
 
 // how often server will query PromQL for server performance metrics
-const callInterval = 5;
+const callInterval = 0.3;
 
 let memoryMinutes = 30;
 
@@ -23,7 +23,7 @@ const cpuUsage = {
     avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod)/
     sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `,
-  threshold: 60,
+  threshold: 100,
 };
 
 const memoryUsage = {
@@ -32,7 +32,7 @@ const memoryUsage = {
     /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
     `,
-  threshold: 60,
+  threshold: 1,
 };
 
 const queryPrometheus = async (queryObj) => {
@@ -44,10 +44,10 @@ const queryPrometheus = async (queryObj) => {
   // console.log(data.statuspod);
   if (data.status === 'success') {
     const results = await data.data.result;
-    console.log('PromQL data:', results);
+    console.log(`PromQL ${label} data array:`, results);
     results.forEach((pod) => {
-      console.log('Data', pod.value[1]);
-      if (pod.value[1] > threshold) {
+      console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
+      if (pod.value[1] > threshold && pod.metric.pod !== 'prometheus-prometheus-kube-prometheus-prometheus-0') {
         console.log(
           `${pod.metric.pod} pod ${label} usage of ${
             Math.floor(pod.value[1] * 100) / 100
@@ -61,7 +61,7 @@ const queryPrometheus = async (queryObj) => {
           value: pod.value[1],
           threshold,
         });
-        console.log(deletedPods);
+        // console.log(deletedPods);
         deletePod(pod.metric.pod, pod.metric.namespace);
         // } else {
         // console.log(

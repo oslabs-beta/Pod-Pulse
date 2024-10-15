@@ -7,10 +7,10 @@ import ParameterContainer from './client/components/ParameterContainer';
 import Graph from './client/components/Graph2';
 
 const App = () => {
-  const [memory, setMemory] = useState(0);
-  const [memTimeFrame, setMemTimeFrame] = useState(1);
-  const [cpu, setCpu] = useState(0);
-  const [cpuTimeFrame, setCpuTimeFrame] = useState(1);
+  const [memory, setMemory] = useState(80);
+  const [memTimeFrame, setMemTimeFrame] = useState(30);
+  const [cpu, setCpu] = useState(80);
+  const [cpuTimeFrame, setCpuTimeFrame] = useState(30);
 
   const [memoryData, setMemoryData] = useState([]);
   const [cpuData, setCpuData] = useState([]);
@@ -20,7 +20,7 @@ const App = () => {
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
     const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
-    / 
+    /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
     `;
     const res = await fetch(
@@ -33,7 +33,7 @@ const App = () => {
   //fetch cpu data to be displayed in graph
   const fetchCpuData = async () => {
     const query = `
-    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/ 
+    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
     sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `;
     const res = await fetch(
@@ -95,6 +95,7 @@ const App = () => {
   const handleSubmit = () => {
     console.log(`Memory: ${memory}, TimeFrame: ${memTimeFrame}`);
     console.log(`CPU: ${cpu}, TimeFrame: ${cpuTimeFrame}`);
+    console.log({ memory, memTimeFrame, cpu, cpuTimeFrame });
     //invoke the set configuration function passing in the client submitted fields
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };

@@ -57,6 +57,14 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           },
           y: {
             beginAtZero: true,
+            min: 0, // Set minimum value
+            max: 100, // Set maximum value
+            ticks: {
+              stepSize: 10, // Set interval for ticks
+              callback: function (value) {
+                return value; // Display the tick values
+              },
+            },
           },
         },
       },

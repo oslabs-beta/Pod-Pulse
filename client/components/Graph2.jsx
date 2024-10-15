@@ -28,6 +28,17 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
 
     const labels = data.map((item) => item.metric.pod);
     const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+    const barColors = cpuUsages.map((value) => {
+      if (value >= 100) return 'rgba(255,0,0,0.2)';
+      else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';
+      else return 'rgba(75, 192, 192, 0.2)';
+    });
+    const borderColors = cpuUsages.map((value) => {
+      if (value >= 100) return 'rgba(255,0,0,1.0)';
+      else if (value >= 75) return 'rgba(255,255, 0, 1.0)';
+      else return 'rgba(75, 192, 192, 1.0)';
+    });
+
 
     // we are destroying the previous chart instance if it exists
     if (graphDisplay) {
@@ -42,8 +53,8 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           {
             label: title,
             data: cpuUsages,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: barColors,
+            borderColor: borderColors,
             borderWidth: 1,
           },
         ],
@@ -62,7 +73,18 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
             ticks: {
               stepSize: 10, // Set interval for ticks
               callback: function (value) {
-                return value; // Display the tick values
+                return value + '%'; // Display the tick values with % sign
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                // Round the value to remove decimal places
+                const roundedValue = Math.round(context.raw);
+                return `${context.dataset.label}: ${roundedValue}%`;
               },
             },
           },

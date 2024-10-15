@@ -16,6 +16,7 @@ const App = () => {
   const [cpuData, setCpuData] = useState([]);
 
   const [graphMinutes, setGraphMinutes] = useState(60);
+  const [deletedPods, setDeletedPods] = useState([]);
 
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
@@ -44,10 +45,29 @@ const App = () => {
     setCpuData(data.data.result);
   };
 
+  const fetchDeletedPods = async () => {
+    const res = await fetch('http://localhost:3333/deleted');
+    console.log(res);
+    const deletedPods = await res.json();
+    console.log(deletedPods);
+    setDeletedPods(deletedPods);
+  };
+
+  useEffect(() => {
+    // fetch deleted pods every 10 seconds
+    // const intervalId =
+    setInterval(fetchDeletedPods, 10000);
+    // console.log(intervalId);
+    // console.log(deletedPods);
+    // return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     fetchMemoryData(graphMinutes);
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
+
+
 
   // SAMPLE CLIENT DATA:
   // {

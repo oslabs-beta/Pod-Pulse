@@ -26,8 +26,17 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       return;
     }
 
-    const labels = data.map((item) => item.metric.pod);
-    const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+    const combinedData = data.map((item, index) => ({
+      pod: item.metric.pod,
+      usage: parseFloat(item.value[1]),
+    }));
+
+    const sortedData = combinedData.sort((a,b) => a.pod.localeCompare(b.pod));
+
+
+
+    const labels = sortedData.map((item) => item.pod);
+    const cpuUsages = sortedData.map((item) => item.usage);
     const barColors = cpuUsages.map((value) => {
       if (value >= 100) return 'rgba(255,0,0,0.2)';
       else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';
@@ -93,13 +102,17 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes <= 60) {
+    if (graphMinutes < 60) {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hour!`
+        `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
+      );
+    } else if (graphMinutes === 60) {
+      setGraphTitleDisplay(
+        `Displaying Average ${title} data for the last ${graphMinutes / 60} hour!`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hours!`
+        `Displaying Average ${title} data for the last ${graphMinutes / 60} hours!`
       );
     }
   }, [graphMinutes, data, title]);
@@ -123,19 +136,19 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(480);
+            selectDisplay(60);
           }}
         >
-          8 Hours
+          1 Hour
         </button>
         <button
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(60);
+            selectDisplay(10);
           }}
         >
-          1 Hour
+          10 Minutes
         </button>
       </form>
     </div>

@@ -115,7 +115,28 @@ border-color: #696efa;
 .graphs {
   margin-top: 100px;
 }
-/* 
+
+table {
+  margin-top: 25px;
+}
+
+table, th, td {
+  border: 1px solid rgb(197, 197, 197);
+}
+
+th, td {
+  color: #e8e3e3;
+}
+
+tr:nth-child(even) {
+  background-color: rgb(55, 55, 55);
+}
+.tableHead {
+  background-color: #e8e3e3;
+  color: #242424;
+  font-weight: 900;
+}
+/*
 /* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -127,4 +148,4 @@ border-color: #696efa;
   button {
     background-color: #f9f9f9;
   } */
-/* } 
+/* }

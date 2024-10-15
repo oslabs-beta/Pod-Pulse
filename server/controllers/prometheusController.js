@@ -153,7 +153,7 @@ configController.saveConfig = (req, res, next) => {
 
 setInterval(() => {
   queryPrometheus(cpuUsage);
-  // queryPrometheus(memoryQuery);
+  // queryPrometheus(memoryUsage);
 }, 1000 * 60 * callInterval);
 
 module.exports = { deletedPods, configController };

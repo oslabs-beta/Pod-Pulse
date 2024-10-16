@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import Navbar from './client/components/Navbar'
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
-import Graph from './client/components/Graph2';
-import DeletedPodTable from '/client/components/DeletedPodTable';
+import GraphsContainer from './client/components/GraphsContainer';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -121,38 +121,28 @@ const App = () => {
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
+
+
   return (
     <div>
-      <ParameterContainer
-        memory={memory}
-        setMemory={setMemory}
-        memTimeFrame={memTimeFrame}
-        cpu={cpu}
-        setCpu={setCpu}
-        cpuTimeFrame={cpuTimeFrame}
-        setCpuTimeFrame={setCpuTimeFrame}
-        setMemTimeFrame={setMemTimeFrame}
-      />
-      <button id='saveButton' onClick={handleSubmit}>
-        Save Config
-      </button>
-      <div className='graphs'>
-        <Graph
-          title='Memory Usage'
-          graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes}
-          data={memoryData}
+      <Navbar />
+        <ParameterContainer
+          memory={memory}
+          setMemory={setMemory}
+          memTimeFrame={memTimeFrame}
+          cpu={cpu}
+          setCpu={setCpu}
+          cpuTimeFrame={cpuTimeFrame}
+          setCpuTimeFrame={setCpuTimeFrame}
+          setMemTimeFrame={setMemTimeFrame}
         />
-
-        <Graph
-          title='CPU Usage'
+        <GraphsContainer 
           graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes}
-          data={cpuData}
+          setGraphMinutes={setGraphMinutes} 
+          cpuData={cpuData}
+          memoryData={memoryData}
         />
       </div>
-      <DeletedPodTable deletedPods={deletedPods} />
-    </div>
   );
 };
 

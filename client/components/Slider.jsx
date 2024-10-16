@@ -1,13 +1,16 @@
 import React from 'react';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+import TimeInput from './TimeInput';
+import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
 
 const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <Box className='sliderBox' sx={{ width: '300px' }}>
-      <h3>{`${metric} Usage (%)`}</h3>
+      <Typography variant='h6'>{`${metric} Usage`}</Typography>
       <Slider
-        sx={{ color: '#c9c7e1', width: '150px' }}
+        sx={{ color: '#adadad', width: '150px' }}
         defaultValue={50}
         aria-label='Small'
         valueLabelDisplay='auto'
@@ -16,15 +19,7 @@ const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
         id='myRange'
         onChange={(e) => onChange(e.target.value)}
       />
-      <h3>{`Time Frame (in min)`}</h3>
-      <input
-        type='number'
-        min='1'
-        max='1000'
-        value={timeFrame}
-        id='timeFrame'
-        onChange={(e) => onTimeChange(e.target.value)}
-      />
+      <TimeInput id='inputBox'/>
     </Box>
   );
 };

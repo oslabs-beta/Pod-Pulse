@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DeletedPodRow = ({ timestamp, namespace, podName, label, value, threshold }) => {
+const RestartedPodRow = ({ timestamp, namespace, podName, label, value, threshold }) => {
   function formatDate(date) {
     const now = new Date();
     const isToday = (date.getDate() === now.getDate() &&
@@ -38,7 +38,7 @@ const DeletedPodRow = ({ timestamp, namespace, podName, label, value, threshold 
   );
 };
 
-export default DeletedPodRow;
+export default RestartedPodRow;
 
 
 // {

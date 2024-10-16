@@ -22,7 +22,13 @@ let config = {
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
 // our array that will hold the object models for the deleted pods and will eventually be displayed to our client on the front end
-const deletedPods = [];
+
+const restartedPods = [];
+
+// variable that can be changed to tell function in queryPrometheus query whether we're demo'ing
+const runDemo = true;
+// name of pod to be restarted if running demo
+const demoPod = 'kube-apiserver-minikube';
 
 //create the controller object
 const configController = {};
@@ -76,11 +82,23 @@ const queryPrometheus = async (label) => {
   if (data.status === 'success') {
     // returning an array with objects(pods) within the javascript data object
     const results = data.data.result;
+    //// If demo'ing product, set runDemo variable to true and set demoPod to be the name of the pod you want to restart. Otherwise, set runDemo to false and this block of code will be skipped.
+    if (runDemo === true) {
+      if (demoPod.length === 0)
+        console.log('ERROR: server set to demo but no demo pod name entered');
+      for (const pod of results) {
+        if (pod.metric.pod === demoPod) {
+          pod.value[1] = 95 + Math.random() * 5;
+        } else {
+          pod.value[1] = Math.random() * 15;
+        }
+      }
+    }
     console.log(`PromQL ${label} data array:`, results);
     const threshold = config[label].threshold;
     // iterate through the result array and access the values within each object (which is a pod)
     results.forEach((pod) => {
-      console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
+      // console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
       // if the memory/cpu usage is currently greater than the threshold and confirming that the pod name isn't the pod that monitors the other pods in the cluster
       if (
         pod.value[1] > threshold &&
@@ -91,8 +109,8 @@ const queryPrometheus = async (label) => {
             Math.floor(pod.value[1] * 100) / 100
           }% exceeds threshold of ${threshold}%. Deleting ${pod.metric.pod}`
         );
-        //push the current pod that is being deleted to the array
-        deletedPods.push({
+        //push the current pod that is being restarted to the array
+        restartedPods.push({
           timestamp: new Date(),
           namespace: pod.metric.namespace,
           podName: pod.metric.pod,
@@ -100,7 +118,7 @@ const queryPrometheus = async (label) => {
           value: pod.value[1],
           threshold,
         });
-        console.log(deletedPods);
+        console.log(restartedPods);
         //invoke the deletePod function and pass in the arguments for the specific pod that needs to be deleted
         deletePod(pod.metric.pod, pod.metric.namespace);
       }
@@ -116,5 +134,5 @@ const prometheusQueries = async () => {
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(prometheusQueries, 1000 * 60 * callInterval);
-// export the deletedPods Array and the configController
-module.exports = { deletedPods, configController };
+// export the restartedPods Array and the configController
+module.exports = { restartedPods, configController };

@@ -6,7 +6,7 @@ import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
-import RestartedPodTable from '/client/components/restartedPodTable';
+import RestartedPodTable from '/client/components/RestartedPodTable';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -132,6 +132,7 @@ const App = () => {
         setMemTimeFrame={setMemTimeFrame}
       />
       <GraphsContainer
+        id='graphContain'
         graphMinutes={graphMinutes}
         setGraphMinutes={setGraphMinutes}
         cpuData={cpuData}

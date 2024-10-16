@@ -43,6 +43,7 @@ h1 {
 }
 
 .sliderBox {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,6 +75,12 @@ h1 {
   color: #888;
 }
 
+#buttonForm {
+  display: flex;
+  justify-content: flex-end;
+  gap: 25px;
+}
+
 button {
   margin: 10px;
   border-radius: 8px;
@@ -94,7 +101,21 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-#saveButton {
+#configButton {
+  padding: 20px;
+}
+
+#timeInput {
+  margin-top: 8px;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #adadad;
+  height: 25px;
+  text-align: center;
+  border: 0;
+}
+
+/* #saveButton {
   margin: 10px;
   border-radius: 8px;
   border: 1px solid transparent;
@@ -105,15 +126,19 @@ button:focus-visible {
   background-color: #e8e3e3;
   cursor: pointer;
   transition: border-color 0.25s;
-}
+} */
 
-#saveButton:hover {
+/* #saveButton:hover {
 background-color: rgb(249, 249, 249);
 border-color: #696efa;
-}
+} */
 
 .graphs {
-  margin-top: 100px;
+  width: 900px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 table {

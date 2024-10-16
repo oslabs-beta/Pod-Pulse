@@ -12,7 +12,7 @@ const DeletedPodTable = ({ deletedPods }) => {
   }
   return (
     <>
-      <H2>Deleted Pods</H2>
+      <h2>Restarted Pods</h2>
       <table>
         <thead>
           <tr>

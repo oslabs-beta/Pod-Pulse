@@ -49,7 +49,7 @@ h1 {
   align-items: center;
 }
 
-/* .logo {
+.logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
@@ -60,7 +60,7 @@ h1 {
 }
 .logo.vanilla:hover {
   filter: drop-shadow(0 0 2em #f7df1eaa);
-} */
+}
 
 #paramBox {
   display: flex;

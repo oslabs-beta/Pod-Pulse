@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import Navbar from './client/components/Navbar'
+import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
-import DeletedPodTable from '/client/components/DeletedPodTable';
+import RestartedPodTable from '/client/components/restartedPodTable';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -18,7 +18,7 @@ const App = () => {
   const [cpuData, setCpuData] = useState([]);
 
   const [graphMinutes, setGraphMinutes] = useState(60);
-  const [deletedPods, setDeletedPods] = useState([]);
+  const [restartedPods, setRestartedPods] = useState([]);
 
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
@@ -47,29 +47,24 @@ const App = () => {
     setCpuData(data.data.result);
   };
 
-  const fetchDeletedPods = async () => {
-    const res = await fetch('http://localhost:3333/deleted');
+  const fetchRestartedPods = async () => {
+    const res = await fetch('http://localhost:3333/restarted');
     console.log(res);
-    const deletedPods = await res.json();
-    console.log(deletedPods);
-    setDeletedPods(deletedPods);
+    const restartedPods = await res.json();
+    console.log(restartedPods);
+    setRestartedPods(restartedPods);
   };
 
   useEffect(() => {
-    // fetch deleted pods every 10 seconds
-    // const intervalId =
-    setInterval(fetchDeletedPods, 10000);
-    // console.log(intervalId);
-    // console.log(deletedPods);
-    // return () => clearInterval(intervalId);
+    // fetch restarted pods every 10 seconds
+    const intervalId = setInterval(fetchRestartedPods, 10000);
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
     fetchMemoryData(graphMinutes);
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
-
-
 
   // SAMPLE CLIENT DATA:
   // {
@@ -125,24 +120,26 @@ const App = () => {
   return (
     <div>
       <Navbar />
-        <ParameterContainer
-          memory={memory}
-          setMemory={setMemory}
-          memTimeFrame={memTimeFrame}
-          cpu={cpu}
-          setCpu={setCpu}
-          cpuTimeFrame={cpuTimeFrame}
-          setCpuTimeFrame={setCpuTimeFrame}
-          setMemTimeFrame={setMemTimeFrame}
-        />
-        <GraphsContainer
-          graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes}
-          cpuData={cpuData}
-          memoryData={memoryData}
-        />
-        {deletedPods.length > 0 ? <DeletedPodTable deletedPods={deletedPods} /> : null}
-      </div>
+      <ParameterContainer
+        memory={memory}
+        setMemory={setMemory}
+        memTimeFrame={memTimeFrame}
+        cpu={cpu}
+        setCpu={setCpu}
+        cpuTimeFrame={cpuTimeFrame}
+        setCpuTimeFrame={setCpuTimeFrame}
+        setMemTimeFrame={setMemTimeFrame}
+      />
+      <GraphsContainer
+        graphMinutes={graphMinutes}
+        setGraphMinutes={setGraphMinutes}
+        cpuData={cpuData}
+        memoryData={memoryData}
+      />
+      {restartedPods.length > 0 ? (
+        <RestartedPodTable restartedPods={restartedPods} />
+      ) : null}
+    </div>
   );
 };
 

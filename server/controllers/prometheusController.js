@@ -13,7 +13,8 @@ let memoryMinutes = 30;
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
 // our array that will hold the object models for the deleted pods and will eventually be displayed to our client on the front end
-const deletedPods = [];
+const restartedPods = [];
+
 // variable that can be changed to tell function in queryPrometheus query whether we're demo'ing
 const runDemo = true;
 // name of pod to be restarted if running demo
@@ -30,7 +31,7 @@ const cpuUsage = {
     `,
   threshold: 80,
 };
-//memory usage Object Model
+// memory usage Object Model
 const memoryUsage = {
   //label for easy reference
   label: 'Memory',
@@ -95,7 +96,7 @@ const queryPrometheus = async (queryObj) => {
         console.log('ERROR: server set to demo but no demo pod name entered');
       for (const pod of results) {
         if (pod.metric.pod === demoPod) {
-          pod.value[1] = 95 + Math.random()*5;
+          pod.value[1] = 95 + Math.random() * 5;
         } else {
           pod.value[1] = Math.random() * 15;
         }
@@ -115,8 +116,8 @@ const queryPrometheus = async (queryObj) => {
             Math.floor(pod.value[1] * 100) / 100
           }% exceeds threshold of ${threshold}%. Deleting ${pod.metric.pod}`
         );
-        //push the current pod that is being deleted to the array
-        deletedPods.push({
+        //push the current pod that is being restarted to the array
+        restartedPods.push({
           timestamp: new Date(),
           namespace: pod.metric.namespace,
           podName: pod.metric.pod,
@@ -124,7 +125,7 @@ const queryPrometheus = async (queryObj) => {
           value: pod.value[1],
           threshold,
         });
-        // console.log(deletedPods);
+        console.log(restartedPods);
         //invoke the deletePod function and pass in the arguments for the specific pod that needs to be deleted
         deletePod(pod.metric.pod, pod.metric.namespace);
         // } else {
@@ -146,5 +147,5 @@ const prometheusQueries = () => {
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(prometheusQueries, 1000 * 60 * callInterval);
-// export the deletedPods Array and the configController
-module.exports = { deletedPods, configController };
+// export the restartedPods Array and the configController
+module.exports = { restartedPods, configController };

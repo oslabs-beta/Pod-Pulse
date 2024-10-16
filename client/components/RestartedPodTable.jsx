@@ -1,14 +1,15 @@
 import React from 'react';
-import DeletedPodRow from './DeletedPodRow';
-const DeletedPodTable = ({ deletedPods }) => {
+import RestartedPodRow from './RestartedPodRow';
+
+const RestartedPodTable = ({ restartedPods }) => {
 
 
   const rows = [];
-  deletedPods.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0));
-  console.log(deletedPods);
-  for (let i = 0; i < Math.min(deletedPods.length, 10); i++) {
-    let { timestamp, podName, namespace, label, value, threshold } = deletedPods[i];
-    rows.push(<DeletedPodRow key={`${timestamp} ${podName}`} timestamp={new Date(timestamp)} podName={podName} namespace={namespace} label={label} value={value} threshold={threshold} />);
+  restartedPods.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0));
+  console.log(restartedPods);
+  for (let i = 0; i < Math.min(restartedPods.length, 10); i++) {
+    let { timestamp, podName, namespace, label, value, threshold } = restartedPods[i];
+    rows.push(<RestartedPodRow key={`${timestamp} ${podName}`} timestamp={new Date(timestamp)} podName={podName} namespace={namespace} label={label} value={value} threshold={threshold} />);
   }
   return (
     <>
@@ -33,4 +34,4 @@ const DeletedPodTable = ({ deletedPods }) => {
   );
 };
 
-export default DeletedPodTable;
+export default RestartedPodTable;

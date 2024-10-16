@@ -151,7 +151,7 @@ const App = () => {
           data={cpuData}
         />
       </div>
-      <DeletedPodTable deletedPods={deletedPods} />
+      {deletedPods.length > 0 ? <DeletedPodTable deletedPods={deletedPods} /> : null}
     </div>
   );
 };

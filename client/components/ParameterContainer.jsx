@@ -26,8 +26,8 @@ const ParameterContainer = ({ handleSubmit, memory, setMemory, memTimeFrame, set
     <Box id='configButton'>
       <Button
         sx={{color: '#242424', backgroundColor: '#adadad', borderRadius: '4px'}}
-        variant='contained' 
-        id='saveButton' 
+        variant='contained'
+        id='saveButton'
         onClick={handleSubmit}>
         Save Config
       </Button>

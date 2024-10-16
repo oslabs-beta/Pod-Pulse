@@ -2,25 +2,27 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
+import Navbar from './client/components/Navbar'
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
-import Graph from './client/components/Graph2';
+import GraphsContainer from './client/components/GraphsContainer';
 
 const App = () => {
-  const [memory, setMemory] = useState(0);
-  const [memTimeFrame, setMemTimeFrame] = useState(1);
-  const [cpu, setCpu] = useState(0);
-  const [cpuTimeFrame, setCpuTimeFrame] = useState(1);
+  const [memory, setMemory] = useState(80);
+  const [memTimeFrame, setMemTimeFrame] = useState(30);
+  const [cpu, setCpu] = useState(80);
+  const [cpuTimeFrame, setCpuTimeFrame] = useState(30);
 
   const [memoryData, setMemoryData] = useState([]);
   const [cpuData, setCpuData] = useState([]);
 
   const [graphMinutes, setGraphMinutes] = useState(60);
+  const [deletedPods, setDeletedPods] = useState([]);
 
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
     const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
-    / 
+    /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
     `;
     const res = await fetch(
@@ -33,7 +35,7 @@ const App = () => {
   //fetch cpu data to be displayed in graph
   const fetchCpuData = async () => {
     const query = `
-    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/ 
+    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
     sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
     `;
     const res = await fetch(
@@ -44,10 +46,29 @@ const App = () => {
     setCpuData(data.data.result);
   };
 
+  const fetchDeletedPods = async () => {
+    const res = await fetch('http://localhost:3333/deleted');
+    console.log(res);
+    const deletedPods = await res.json();
+    console.log(deletedPods);
+    setDeletedPods(deletedPods);
+  };
+
+  useEffect(() => {
+    // fetch deleted pods every 10 seconds
+    // const intervalId =
+    setInterval(fetchDeletedPods, 10000);
+    // console.log(intervalId);
+    // console.log(deletedPods);
+    // return () => clearInterval(intervalId);
+  }, []);
+
   useEffect(() => {
     fetchMemoryData(graphMinutes);
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
+
+
 
   // SAMPLE CLIENT DATA:
   // {
@@ -95,40 +116,33 @@ const App = () => {
   const handleSubmit = () => {
     console.log(`Memory: ${memory}, TimeFrame: ${memTimeFrame}`);
     console.log(`CPU: ${cpu}, TimeFrame: ${cpuTimeFrame}`);
+    console.log({ memory, memTimeFrame, cpu, cpuTimeFrame });
     //invoke the set configuration function passing in the client submitted fields
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
+
+
   return (
     <div>
-      <ParameterContainer
-        memory={memory}
-        setMemory={setMemory}
-        memTimeFrame={memTimeFrame}
-        cpu={cpu}
-        setCpu={setCpu}
-        cpuTimeFrame={cpuTimeFrame}
-        setCpuTimeFrame={setCpuTimeFrame}
-      />
-      <button id='saveButton' onClick={handleSubmit}>
-        Save Config
-      </button>
-      <div className='graphs'>
-        <Graph
-          title='Memory Usage'
-          graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes}
-          data={memoryData}
+      <Navbar />
+        <ParameterContainer
+          memory={memory}
+          setMemory={setMemory}
+          memTimeFrame={memTimeFrame}
+          cpu={cpu}
+          setCpu={setCpu}
+          cpuTimeFrame={cpuTimeFrame}
+          setCpuTimeFrame={setCpuTimeFrame}
+          setMemTimeFrame={setMemTimeFrame}
         />
-
-        <Graph
-          title='CPU Usage'
+        <GraphsContainer 
           graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes}
-          data={cpuData}
+          setGraphMinutes={setGraphMinutes} 
+          cpuData={cpuData}
+          memoryData={memoryData}
         />
       </div>
-    </div>
   );
 };
 

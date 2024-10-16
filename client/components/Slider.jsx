@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <Box className='sliderBox' sx={{ width: '300px' }}>
-      <h3>{`${metric} Usage`}</h3>
+      <h3>{`${metric} Usage (%)`}</h3>
       <Slider
         sx={{ color: '#c9c7e1', width: '150px' }}
         defaultValue={50}

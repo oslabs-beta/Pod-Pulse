@@ -26,8 +26,25 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       return;
     }
 
-    const labels = data.map((item) => item.metric.pod);
-    const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+    const combinedData = data.map((item, index) => ({
+      pod: item.metric.pod,
+      usage: parseFloat(item.value[1]),
+    }));
+
+    const sortedData = combinedData.sort((a, b) => a.pod.localeCompare(b.pod));
+
+    const labels = sortedData.map((item) => item.pod);
+    const cpuUsages = sortedData.map((item) => item.usage);
+    const barColors = cpuUsages.map((value) => {
+      if (value >= 100) return 'rgba(255,0,0,0.2)';
+      else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';
+      else return 'rgba(75, 192, 192, 0.2)';
+    });
+    const borderColors = cpuUsages.map((value) => {
+      if (value >= 100) return 'rgba(255,0,0,1.0)';
+      else if (value >= 75) return 'rgba(255,255, 0, 1.0)';
+      else return 'rgba(75, 192, 192, 1.0)';
+    });
 
     // we are destroying the previous chart instance if it exists
     if (graphDisplay) {
@@ -42,8 +59,8 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           {
             label: title,
             data: cpuUsages,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: barColors,
+            borderColor: borderColors,
             borderWidth: 1,
           },
         ],
@@ -57,19 +74,46 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           },
           y: {
             beginAtZero: true,
+            min: 0, // Set minimum value
+            max: 100, // Set maximum value
+            ticks: {
+              stepSize: 10, // Set interval for ticks
+              callback: function (value) {
+                return value + '%'; // Display the tick values with % sign
+              },
+            },
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                // Round the value to remove decimal places
+                const roundedValue = Math.round(context.raw);
+                return `${context.dataset.label}: ${roundedValue}%`;
+              },
+            },
           },
         },
       },
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes <= 60) {
+    if (graphMinutes < 60) {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hour!`
+        `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
+      );
+    } else if (graphMinutes === 60) {
+      setGraphTitleDisplay(
+        `Displaying Average ${title} data for the last ${
+          graphMinutes / 60
+        } hour!`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hours!`
+        `Displaying Average ${title} data for the last ${
+          graphMinutes / 60
+        } hours!`
       );
     }
   }, [graphMinutes, data, title]);
@@ -93,19 +137,19 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(480);
+            selectDisplay(60);
           }}
         >
-          8 Hours
+          1 Hour
         </button>
         <button
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(60);
+            selectDisplay(10);
           }}
         >
-          1 Hour
+          10 Minutes
         </button>
       </form>
     </div>

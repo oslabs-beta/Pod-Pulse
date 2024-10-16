@@ -12,22 +12,25 @@ const RestartedPodTable = ({ restartedPods }) => {
     rows.push(<RestartedPodRow key={`${timestamp} ${podName}`} timestamp={new Date(timestamp)} podName={podName} namespace={namespace} label={label} value={value} threshold={threshold} />);
   }
   return (
-    <table>
-      <thead>
-        <tr>
-          <th className="tableHead">Pod Name</th>
-          <th className="tableHead">Time of Deletion</th>
-          <th className="tableHead">Pod Namespace</th>
-          <th className="tableHead">Metric Type</th>
-          <th className="tableHead">Metric at Restart</th>
-          <th className="tableHead">Restart
-            Threshold</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows}
-      </tbody>
-    </table>
+    <>
+      <h2>Restarted Pods</h2>
+      <table>
+        <thead>
+          <tr>
+            <th className="tableHead">Pod Name</th>
+            <th className="tableHead">Time of Deletion</th>
+            <th className="tableHead">Pod Namespace</th>
+            <th className="tableHead">Metric Type</th>
+            <th className="tableHead">Metric at Restart</th>
+            <th className="tableHead">Restart
+              Threshold</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
+    </>
   );
 };
 

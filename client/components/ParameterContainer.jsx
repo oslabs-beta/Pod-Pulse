@@ -3,7 +3,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
-import Parameters from './Slider';
+import Parameter from './Parameter';
 import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 
 const ParameterContainer = ({
@@ -20,14 +20,15 @@ const ParameterContainer = ({
   return (
     <>
       <Box id='paramBox'>
-        <Parameters
+        <Parameter
           metric='Memory'
           value={memory}
           onChange={setMemory}
           timeFrame={memTimeFrame}
           onTimeChange={setMemTimeFrame}
+       
         />
-        <Parameters
+        <Parameter
           metric='CPU'
           value={cpu}
           onChange={setCpu}

@@ -3,23 +3,54 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
-import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
 import RestartedPodTable from '/client/components/restartedPodTable';
 
 const App = () => {
+  //State to configure frontend parameters
   const [memory, setMemory] = useState(80);
   const [memTimeFrame, setMemTimeFrame] = useState(30);
   const [cpu, setCpu] = useState(80);
   const [cpuTimeFrame, setCpuTimeFrame] = useState(30);
+  //savedConfiguration added to track saved parameters for frontend display. ADD TO FRONTEND DISPLAY
+  const [savedConfiguration, setSavedConfiguration] = useState({
+    savedMemoryThreshold: 0,
+    savedMemTimeFrame: 0,
+    savedCpuThreshold: 0,
+    savedCpuTimeFrame: 0,
+  });
 
+  //State for graph displays
   const [memoryData, setMemoryData] = useState([]);
   const [cpuData, setCpuData] = useState([]);
-
   const [graphMinutes, setGraphMinutes] = useState(60);
   const [restartedPods, setRestartedPods] = useState([]);
+
+  const newFunc = async (requestedData, graphMinutes) => {
+    try {
+      //deconstructing to get values
+      const config = {
+        requestedData,
+        graphMinutes
+      };
+      const response = await fetch('http://localhost:3333/graphData', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch graph data');
+      }
+      const result = await response.json();
+      console.log('Graph data fetched successfully:', result);
+    } catch (error) {
+      console.error('Error fetching graph data:', error);
+    }
+  };
 
   //fetch memory data to be displayed in graph
   const fetchMemoryData = async () => {
@@ -44,7 +75,6 @@ const App = () => {
       `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
     );
     const data = await res.json();
-    setCpuData(data.data.result);
     setCpuData(data.data.result);
   };
 
@@ -103,6 +133,12 @@ const App = () => {
       // parse the json reponse - What will we be responding with??
       const result = await response.json();
       console.log('Configuration saved successfully:', result);
+      setSavedConfiguration({
+        savedMemoryThreshold: result.memoryThreshold,
+        savedMemTimeFrame: result.memoryMinutes,
+        savedCpuThreshold: result.cpuThreshold,
+        savedCpuTimeFrame: result.cpuMinutes,
+      });
       // error handler
     } catch (error) {
       console.error('Error sending configuration:', error);

@@ -11,6 +11,13 @@ const App = () => {
   const [memTimeFrame, setMemTimeFrame] = useState(30);
   const [cpu, setCpu] = useState(80);
   const [cpuTimeFrame, setCpuTimeFrame] = useState(30);
+  //Current Parameters added to track saved parameters for frontend display
+  const [currentParameters, setCurrentParameters] = useState({
+    memory: 0,
+    memTimeFrame: 0,
+    cpu: 0,
+    cpuTimeFrame: 0
+  })
 
   const [memoryData, setMemoryData] = useState([]);
   const [cpuData, setCpuData] = useState([]);

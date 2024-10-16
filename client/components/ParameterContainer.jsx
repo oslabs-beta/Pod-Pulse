@@ -1,19 +1,19 @@
 import React from 'react';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-import Parameters from './Slider';
+import Parameter from './Parameter';
 
 const ParameterContainer = ({ memory, setMemory, memTimeFrame, setMemTimeFrame, cpu, setCpu, cpuTimeFrame, setCpuTimeFrame }) => {
   return(
     <Box id='paramBox'>
-      <Parameters
+      <Parameter
         metric='Memory'
         value={memory}
         onChange={setMemory}
         timeFrame={memTimeFrame}
         onTimeChange={setMemTimeFrame}
         />
-      <Parameters
+      <Parameter
         metric='CPU'
         value={cpu}
         onChange={setCpu}

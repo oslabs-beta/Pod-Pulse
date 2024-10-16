@@ -20,19 +20,19 @@ const deletedPods = [];
 const cpuUsage = {
   label: 'CPU',
   queryString: `
-    avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod)/
-    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
+    avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod, namespace)/
+    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
     `,
-  threshold: 100,
+  threshold: 90,
 };
 
 const memoryUsage = {
   label: 'Memory',
-  queryString: `sum(avg_over_time(container_memory_usage_bytes[${memoryMinutes}m])) by (pod)
+  queryString: `sum(avg_over_time(container_memory_usage_bytes[${memoryMinutes}m])) by (pod, namespace)
     /
-    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
     `,
-  threshold: 1,
+  threshold: 90,
 };
 
 const queryPrometheus = async (queryObj) => {
@@ -101,7 +101,7 @@ configController.saveConfig = (req, res, next) => {
 
 const prometheusQueries = () => {
   queryPrometheus(cpuUsage);
-  queryPrometheus(memoryUsage);
+  // queryPrometheus(memoryUsage);
 };
 
 setInterval(prometheusQueries, 1000 * 60 * callInterval);

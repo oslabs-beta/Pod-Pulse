@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
+import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
 
 //registering all default components that may be used to create the graph but once we know exactly what we will use we can specify them directly to make it more optimized
 Chart.register(...registerables);
@@ -26,8 +28,17 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       return;
     }
 
-    const labels = data.map((item) => item.metric.pod);
-    const cpuUsages = data.map((item) => parseFloat(item.value[1]));
+    const combinedData = data.map((item, index) => ({
+      pod: item.metric.pod,
+      usage: parseFloat(item.value[1]),
+    }));
+
+    const sortedData = combinedData.sort((a,b) => a.pod.localeCompare(b.pod));
+
+
+
+    const labels = sortedData.map((item) => item.pod);
+    const cpuUsages = sortedData.map((item) => item.usage);
     const barColors = cpuUsages.map((value) => {
       if (value >= 100) return 'rgba(255,0,0,0.2)';
       else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';
@@ -93,24 +104,30 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes <= 60) {
+    if (graphMinutes < 60) {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hour!`
+        `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
+      );
+    } else if (graphMinutes === 60) {
+      setGraphTitleDisplay(
+        `Displaying Average ${title} data for the last ${graphMinutes / 60} hour!`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying ${title} data for the last ${graphMinutes / 60} hours!`
+        `Displaying Average ${title} data for the last ${graphMinutes / 60} hours!`
       );
     }
   }, [graphMinutes, data, title]);
 
   return (
     <div>
-      <h2>{title}</h2>
-      <div>{graphTitleDisplay}</div>
-      <canvas ref={chartRef} width='800' height='400'></canvas>
-      <form>
-        <button
+      <Typography variant='h4'>{title}</Typography>
+      <Typography variant='subtitle'>{graphTitleDisplay}</Typography>
+      <canvas ref={chartRef} width='400' height='400'></canvas>
+      <form id='buttonForm'>
+        <Button
+          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          variant='contained'
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
@@ -118,25 +135,29 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           }}
         >
           24 Hours
-        </button>
-        <button
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(480);
-          }}
-        >
-          8 Hours
-        </button>
-        <button
+        </Button>
+        <Button
+          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          variant='contained'
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
             selectDisplay(60);
           }}
         >
+          8 Hours
+        </Button>
+        <Button
+          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          variant='contained'
+          className='timeDisplay'
+          onClick={(e) => {
+            e.preventDefault();
+            selectDisplay(10);
+          }}
+        >
           1 Hour
-        </button>
+        </Button>
       </form>
     </div>
   );

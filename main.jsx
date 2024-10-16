@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
-import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';

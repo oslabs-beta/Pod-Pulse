@@ -13,11 +13,10 @@ const RestartedPodTable = ({ restartedPods }) => {
   }
   return (
     <>
-      <h2>Restarted Pods</h2>
       <table>
         <thead>
           <tr>
-            <th className="tableHead">Pod Name</th>
+            <th className="tableHead">Restarted Pods</th>
             <th className="tableHead">Time of Deletion</th>
             <th className="tableHead">Pod Namespace</th>
             <th className="tableHead">Metric Type</th>

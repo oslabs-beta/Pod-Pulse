@@ -12,8 +12,8 @@ let cpuMinutes = 30;
 let memoryMinutes = 30;
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
-// our array that will hold the object models for the deleted pods and will eventually be displayed to our client on the front end
-const deletedPods = [];
+// our array that will hold the object models for the restarted pods and will eventually be displayed to our client on the front end
+const restartedPods = [];
 // cpuUsage Object Model
 const cpuUsage = {
   //label for easy reference
@@ -25,7 +25,7 @@ const cpuUsage = {
     `,
   threshold: 80,
 };
-//memory usage Object Model
+// memory usage Object Model
 const memoryUsage = {
   //label for easy reference
   label: 'Memory',
@@ -98,8 +98,8 @@ const queryPrometheus = async (queryObj) => {
             Math.floor(pod.value[1] * 100) / 100
           }% exceeds threshold of ${threshold}%. Deleting ${pod.metric.pod}`
         );
-        //push the current pod that is being deleted to the array
-        deletedPods.push({
+        //push the current pod that is being restarted to the array
+        restartedPods.push({
           timestamp: new Date(),
           namespace: pod.metric.namespace,
           podName: pod.metric.pod,
@@ -107,8 +107,8 @@ const queryPrometheus = async (queryObj) => {
           value: pod.value[1],
           threshold,
         });
-        console.log(deletedPods);
-        //invoke the deletePod function and pass in the arguments for the specific pod that needs to be deleted
+        console.log(restartedPods);
+        //invoke the deletePod function and pass in the arguments for the specific pod that needs to be restarted
         deletePod(pod.metric.pod, pod.metric.namespace);
         // } else {
         // console.log(
@@ -129,5 +129,5 @@ const prometheusQueries = () => {
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(prometheusQueries, 1000 * 60 * callInterval);
-// export the deletedPods Array and the configController
-module.exports = { deletedPods, configController };
+// export the restartedPods Array and the configController
+module.exports = { restartedPods, configController };

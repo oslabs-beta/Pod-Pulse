@@ -6,6 +6,7 @@ import Navbar from './client/components/Navbar'
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
+import DeletedPodTable from '/client/components/DeletedPodTable';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -121,8 +122,6 @@ const App = () => {
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
-
-
   return (
     <div>
       <Navbar />
@@ -136,12 +135,13 @@ const App = () => {
           setCpuTimeFrame={setCpuTimeFrame}
           setMemTimeFrame={setMemTimeFrame}
         />
-        <GraphsContainer 
+        <GraphsContainer
           graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes} 
+          setGraphMinutes={setGraphMinutes}
           cpuData={cpuData}
           memoryData={memoryData}
         />
+        {deletedPods.length > 0 ? <DeletedPodTable deletedPods={deletedPods} /> : null}
       </div>
   );
 };

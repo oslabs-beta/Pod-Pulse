@@ -6,36 +6,24 @@ const prometheusUrl = 'http://localhost:9090/api/v1/query?query=';
 const deletePod = require('./miniKubeConnect');
 // server side check to see if the backend is up and running
 console.log('Prometheus Controller Running!');
-// declare cpuMinutes variable that holds the user set value to eventually be sent into the query
-let cpuMinutes = 30;
-// // declare cpuMinutes variable that holds the user set value to eventually be sent into the query
-let memoryMinutes = 30;
+
+//eliminated global variables in case multiple requests come in rapidly
+let config = {
+  cpu: {
+    threshold: 80,
+    minutes: 30,
+  },
+  memory: {
+    threshold: 80,
+    minutes: 30,
+  },
+};
+
 // how often server will query PromQL for server performance metrics
 const callInterval = 0.3;
 // our array that will hold the object models for the deleted pods and will eventually be displayed to our client on the front end
 const deletedPods = [];
-// cpuUsage Object Model
-const cpuUsage = {
-  //label for easy reference
-  label: 'CPU',
-  //this is the string that will be connected with prometheusUrl to get avg cpu usage for each pod for a user set time and dividing by total amount of cpu that we expect pod to use
-  queryString: `
-    avg(rate(container_cpu_usage_seconds_total[${cpuMinutes}m])) by (pod, namespace)/
-    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
-    `,
-  threshold: 80,
-};
-//memory usage Object Model
-const memoryUsage = {
-  //label for easy reference
-  label: 'Memory',
-  //this is the string that will be connected with prometheusUrl to get avg memory usage for each pod for a user set time and dividing by total amount of memory that we expect pod to use
-  queryString: `sum(avg_over_time(container_memory_usage_bytes[${memoryMinutes}m])) by (pod, namespace)
-    /
-    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
-    `,
-  threshold: 80,
-};
+
 //create the controller object
 const configController = {};
 // define a function saveConfig as a method on the controller
@@ -43,21 +31,14 @@ configController.saveConfig = (req, res, next) => {
   try {
     // deconstruct the values sent in from the client off of the req.body
     const { memory, memTimeFrame, cpu, cpuTimeFrame } = req.body;
-    // reference the cpuUsage object and the key threshold and set it's value to user inputted cpu
-    cpuUsage.threshold = cpu;
-    // reassign cpu minutes to the user inputted cpuTimeFrame
-    cpuMinutes = cpuTimeFrame;
-    // reference the memoryUsage object and the key threshold and set it's value to user inputted cpu
-    memoryUsage.threshold = memory;
-    // reassign memory minutes to the user inputted cpuTimeFrame
-    memoryMinutes = memTimeFrame;
-    //on the res.locals key, save the user savedConfig Object with the user defined inputs
-    res.locals.savedConfig = {
-      cpuThreshold: cpuUsage.threshold,
-      memoryThreshold: memoryUsage.threshold,
-      cpuMinutes,
-      memoryMinutes,
-    };
+
+    config.cpu.threshold = cpu;
+    config.cpu.minutes = cpuTimeFrame;
+    config.memory.threshold = memory;
+    config.memory.minutes = memTimeFrame;
+
+    res.locals.savedConfig = { ...config };
+
     console.log(res.locals.savedConfig);
     // invoke the prometheusQueries
     prometheusQueries();
@@ -70,10 +51,21 @@ configController.saveConfig = (req, res, next) => {
   }
 };
 //function used to query and get data from Prometheus using the user inputs from the frontend - asynchronous function w/ the user inputs Object Model as a parameter
-const queryPrometheus = async (queryObj) => {
+const queryPrometheus = async (label) => {
   // console.log('In queryPrometheus');
-  //deconstructed values from the passed-in user input Object Model
-  const { label, queryString, threshold } = queryObj;
+
+  const queryString =
+    label === 'cpu'
+      ? `
+  avg(rate(container_cpu_usage_seconds_total[${config.cpu.minutes}m])) by (pod, namespace)/
+  sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
+  `
+      : `sum(avg_over_time(container_memory_usage_bytes[${config.memory.minutes}m])) by (pod, namespace)
+    /
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
+    `;
+
+  // console.log(`LOOK HERE: ${memoryMinutes}`);
   // the Url we will be querying Prometheus with
   const encodedUrl = `${prometheusUrl}${encodeURIComponent(queryString)}`;
   // promise that has a fetch request to Prometheus and the data is stored in the response variable as a string
@@ -85,6 +77,7 @@ const queryPrometheus = async (queryObj) => {
     // returning an array with objects(pods) within the javascript data object
     const results = data.data.result;
     console.log(`PromQL ${label} data array:`, results);
+    const threshold = config[label].threshold;
     // iterate through the result array and access the values within each object (which is a pod)
     results.forEach((pod) => {
       console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
@@ -110,12 +103,6 @@ const queryPrometheus = async (queryObj) => {
         console.log(deletedPods);
         //invoke the deletePod function and pass in the arguments for the specific pod that needs to be deleted
         deletePod(pod.metric.pod, pod.metric.namespace);
-        // } else {
-        // console.log(
-        //   `${pod.metric.pod} ${label} usage of ${
-        //     Math.floor(pod.value[1] * 10000) / 100
-        //   }% falls below threshold of ${Math.floor(threshold * 10000) / 100}%.`
-        // );
       }
     });
   } else {
@@ -123,9 +110,9 @@ const queryPrometheus = async (queryObj) => {
   }
 };
 //function that invokes the queryPrometheus function, passing in cpuUsage, memoryUsage respectively
-const prometheusQueries = () => {
-  queryPrometheus(cpuUsage);
-  queryPrometheus(memoryUsage);
+const prometheusQueries = async () => {
+  await queryPrometheus('cpu');
+  await queryPrometheus('memory');
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(prometheusQueries, 1000 * 60 * callInterval);

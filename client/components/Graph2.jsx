@@ -143,10 +143,10 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(10);
+            selectDisplay(60);
           }}
         >
-          8 Hours
+          1 Hour
         </Button>
         <Button
           sx={{ color: '#242424', backgroundColor: '#adadad' }}
@@ -157,7 +157,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
             selectDisplay(10);
           }}
         >
-          1 Hour
+          10 Minutes
         </Button>
       </form>
     </div>

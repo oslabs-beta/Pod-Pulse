@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import Navbar from './client/components/Navbar'
+import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
+import DeletedPodTable from '/client/components/DeletedPodTable';
 
 const App = () => {
   const [memory, setMemory] = useState(80);
@@ -68,8 +69,6 @@ const App = () => {
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
 
-
-
   // SAMPLE CLIENT DATA:
   // {
   //   "memory": 1024,
@@ -121,28 +120,30 @@ const App = () => {
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
-
-
   return (
     <div>
       <Navbar />
-        <ParameterContainer
-          memory={memory}
-          setMemory={setMemory}
-          memTimeFrame={memTimeFrame}
-          cpu={cpu}
-          setCpu={setCpu}
-          cpuTimeFrame={cpuTimeFrame}
-          setCpuTimeFrame={setCpuTimeFrame}
-          setMemTimeFrame={setMemTimeFrame}
-        />
-        <GraphsContainer 
-          graphMinutes={graphMinutes}
-          setGraphMinutes={setGraphMinutes} 
-          cpuData={cpuData}
-          memoryData={memoryData}
-        />
-      </div>
+      <ParameterContainer
+        handleSubmit={handleSubmit}
+        memory={memory}
+        setMemory={setMemory}
+        memTimeFrame={memTimeFrame}
+        cpu={cpu}
+        setCpu={setCpu}
+        cpuTimeFrame={cpuTimeFrame}
+        setCpuTimeFrame={setCpuTimeFrame}
+        setMemTimeFrame={setMemTimeFrame}
+      />
+      <GraphsContainer
+        graphMinutes={graphMinutes}
+        setGraphMinutes={setGraphMinutes}
+        cpuData={cpuData}
+        memoryData={memoryData}
+      />
+      {deletedPods.length > 0 ? (
+        <DeletedPodTable deletedPods={deletedPods} />
+      ) : null}
+    </div>
   );
 };
 

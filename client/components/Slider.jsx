@@ -8,7 +8,7 @@ import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_Numb
 const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <Box className='sliderBox' sx={{ width: '300px' }}>
-      <Typography variant='h6'>{`${metric} Usage`}</Typography>
+      <Typography variant='h6'>{`${metric} Usage (%)`}</Typography>
       <Slider
         sx={{ color: '#adadad', width: '150px' }}
         defaultValue={50}
@@ -19,7 +19,11 @@ const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
         id='myRange'
         onChange={(e) => onChange(e.target.value)}
       />
-      <TimeInput id='inputBox' />
+      <TimeInput
+        id='inputBox'
+        onTimeChange={onTimeChange}
+        timeFrame={timeFrame}
+      />
     </Box>
   );
 };

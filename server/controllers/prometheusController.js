@@ -124,7 +124,7 @@ const queryPrometheus = async (queryObj) => {
 };
 //function that invokes the queryPrometheus function, passing in cpuUsage, memoryUsage respectively
 const prometheusQueries = () => {
-  queryPrometheus(cpuUsage);
+  // queryPrometheus(cpuUsage);
   // queryPrometheus(memoryUsage);
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes

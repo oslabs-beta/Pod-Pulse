@@ -33,9 +33,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       usage: parseFloat(item.value[1]),
     }));
 
-    const sortedData = combinedData.sort((a,b) => a.pod.localeCompare(b.pod));
-
-
+    const sortedData = combinedData.sort((a, b) => a.pod.localeCompare(b.pod));
 
     const labels = sortedData.map((item) => item.pod);
     const cpuUsages = sortedData.map((item) => item.usage);
@@ -49,7 +47,6 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       else if (value >= 75) return 'rgba(255,255, 0, 1.0)';
       else return 'rgba(75, 192, 192, 1.0)';
     });
-
 
     // we are destroying the previous chart instance if it exists
     if (graphDisplay) {
@@ -110,11 +107,15 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       );
     } else if (graphMinutes === 60) {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${graphMinutes / 60} hour!`
+        `Displaying Average ${title} data for the last ${
+          graphMinutes / 60
+        } hour!`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${graphMinutes / 60} hours!`
+        `Displaying Average ${title} data for the last ${
+          graphMinutes / 60
+        } hours!`
       );
     }
   }, [graphMinutes, data, title]);
@@ -126,7 +127,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       <canvas ref={chartRef} width='400' height='400'></canvas>
       <form id='buttonForm'>
         <Button
-          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          sx={{ color: '#242424', backgroundColor: '#adadad' }}
           variant='contained'
           className='timeDisplay'
           onClick={(e) => {
@@ -137,7 +138,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           24 Hours
         </Button>
         <Button
-          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          sx={{ color: '#242424', backgroundColor: '#adadad' }}
           variant='contained'
           className='timeDisplay'
           onClick={(e) => {
@@ -145,10 +146,10 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
             selectDisplay(60);
           }}
         >
-          8 Hours
+          1 Hour
         </Button>
         <Button
-          sx={{color: '#242424', backgroundColor: '#adadad'}}
+          sx={{ color: '#242424', backgroundColor: '#adadad' }}
           variant='contained'
           className='timeDisplay'
           onClick={(e) => {
@@ -156,7 +157,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
             selectDisplay(10);
           }}
         >
-          1 Hour
+          10 Minutes
         </Button>
       </form>
     </div>

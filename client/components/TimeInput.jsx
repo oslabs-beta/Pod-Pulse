@@ -19,16 +19,25 @@ import AddIcon from '@mui/icons-material/Add';
 //   );
 // };
 
-const TimeInput = React.forwardRef(function CustomNumberInput(props, ref) {
+const TimeInput = React.forwardRef(function CustomNumberInput(
+  { timeFrame, onTimeChange, ...props },
+  ref
+) {
   return (
-    <input
-      id='timeInput'
-      type='number'
-      label='minutes'
-      placeholder='Refresh window (min)'>
-    </input>
+    <div>
+      <label htmlFor='timeInput'>Refresh window (min):</label>
+      <input
+        id='timeInput'
+        type='number'
+        min='1'
+        max='10000'
+        value={timeFrame}
+        onChange={(e) => onTimeChange(e.target.value)}
+        placeholder='Refresh window (min)'
+        aria-label='Refresh window in minutes'
+      />
+    </div>
   );
 });
-
 
 export default TimeInput;

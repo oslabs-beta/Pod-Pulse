@@ -19,23 +19,26 @@ const ParameterContainer = ({
 }) => {
   return (
     <>
+    <div id='outerBox'>
       <Box id='paramBox'>
         <Parameters
           metric='Memory'
           value={memory}
           onChange={setMemory}
           timeFrame={memTimeFrame}
-          onTimeChange={setMemTimeFrame}
-        />
+          onTimeChange={setMemTimeFrame} />
         <Parameters
           metric='CPU'
           value={cpu}
           onChange={setCpu}
           timeFrame={cpuTimeFrame}
-          onTimeChange={setCpuTimeFrame}
-        />
+          onTimeChange={setCpuTimeFrame} />
       </Box>
-      <Box id='configButton'>
+      <Box id='settingsCard'>
+
+      </Box>
+    </div>
+    <Box id='configButton'>
         <Button
           sx={{
             color: '#242424',
@@ -52,8 +55,7 @@ const ParameterContainer = ({
         >
           Save Config
         </Button>
-      </Box>
-    </>
+      </Box></>
   );
 };
 

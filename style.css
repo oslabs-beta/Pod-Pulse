@@ -162,6 +162,29 @@ tr:nth-child(odd) {
   background-color: #242424;
 }
 
+.heartbeat {
+  animation: heartbeat 1.5s infinite; 
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(0.9); 
+  }
+  15% {
+    transform: scale(1.1); 
+  }
+  30% {
+    transform: scale(1.0); 
+  }
+  45% {
+    transform: scale(1.1); 
+  }
+  60% {
+    transform: scale(0.9); 
+  }
+}
+
+
 /* .thead {
   background-color: #242424;
   color: #242424;
@@ -180,4 +203,6 @@ tr:nth-child(odd) {
     background-color: #f9f9f9;
   } */
 /* }
+
+
 

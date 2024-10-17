@@ -76,12 +76,12 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           },
           y: {
             beginAtZero: true,
-            min: 0, // Set minimum value
-            max: 100, // Set maximum value
+            min: 0,
+            max: 100,
             ticks: {
-              stepSize: 10, // Set interval for ticks
+              stepSize: 10,
               callback: function (value) {
-                return value + '%'; // Display the tick values with % sign
+                return value + '%';
               },
             },
           },
@@ -143,7 +143,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(480);
+            selectDisplay(60);
           }}
         >
           1 Hour
@@ -154,7 +154,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(60);
+            selectDisplay(10);
           }}
         >
           10 Minutes

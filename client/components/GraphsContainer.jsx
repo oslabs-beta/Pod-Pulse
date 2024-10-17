@@ -22,5 +22,5 @@ const GraphsContainer = ({ graphMinutes, setGraphMinutes, cpuData, memoryData })
     </div>
   );
 };
-
+// Must switch to flex-end for justification
 export default GraphsContainer;

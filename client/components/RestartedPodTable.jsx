@@ -1,9 +1,34 @@
-import React from 'react';
+import * as React from 'react';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 import RestartedPodRow from './RestartedPodRow';
+import { styled } from '@mui/material/styles';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 const RestartedPodTable = ({ restartedPods }) => {
-
-
   const rows = [];
   restartedPods.sort((a, b) => (a.timestamp < b.timestamp) ? 1 : ((b.timestamp < a.timestamp) ? -1 : 0));
   console.log(restartedPods);
@@ -12,23 +37,25 @@ const RestartedPodTable = ({ restartedPods }) => {
     rows.push(<RestartedPodRow key={`${timestamp} ${podName}`} timestamp={new Date(timestamp)} podName={podName} namespace={namespace} label={label} value={value} threshold={threshold} />);
   }
   return (
-    <>
-      <table>
-        <thead>
-          <tr>
-            <th className="tableHead">Restarted Pods</th>
-            <th className="tableHead">Time of Deletion</th>
-            <th className="tableHead">Pod Namespace</th>
-            <th className="tableHead">Metric Type</th>
-            <th className="tableHead">Metric at Restart</th>
-            <th className="tableHead">Restart
-              Threshold</th>
-          </tr>
-        </thead>
-        <tbody>
+      <>
+      <h2>Restarted Pods</h2>
+    <TableContainer className='tabContain' sx={{backgroundColor: '#242424' }} component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead id='tblhd'>
+          <StyledTableRow id='str'>
+              <StyledTableCell>Pod Name</StyledTableCell>
+              <StyledTableCell>Time of Deletion</StyledTableCell>
+              <StyledTableCell>Pod Namespace</StyledTableCell>
+              <StyledTableCell>Metric Type</StyledTableCell>
+              <StyledTableCell>Metric at Restart</StyledTableCell>
+              <StyledTableCell>Restart Threshold</StyledTableCell>
+          </StyledTableRow>
+        </TableHead>
+        <TableBody>
           {rows}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
+    </TableContainer>
     </>
   );
 };

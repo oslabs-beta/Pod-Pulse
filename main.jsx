@@ -6,7 +6,11 @@ import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
-import RestartedPodTable from '/client/components/restartedPodTable';
+import RestartedPodTable from './client/components/restartedPodTable';
+import fullLogo from './client/assets/fullLogo.png';
+import logoDesign from './client/assets/logoDesign.png';
+import logoName from './client/assets/logoName.png';
+import logoSlogan from './client/assets/logoSlogan.png';
 
 const App = () => {
   //State to configure frontend parameters
@@ -89,11 +93,6 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const queryIntervalId = setInterval(queryChartData, 10000);
-    return () => clearInterval(queryIntervalId);
-  })
-
-  useEffect(() => {
     fetchMemoryData(graphMinutes);
     fetchCpuData(graphMinutes);
   }, [graphMinutes]);
@@ -158,6 +157,13 @@ const App = () => {
   return (
     <div>
       <Navbar />
+      <div style={{ textAlign: 'center', margin: '20px 0' }}>
+        <img
+          src={fullLogo}
+          alt='Logo'
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </div>
       <ParameterContainer
         handleSubmit={handleSubmit}
         memory={memory}
@@ -170,6 +176,7 @@ const App = () => {
         setMemTimeFrame={setMemTimeFrame}
       />
       <GraphsContainer
+        id='graphContain'
         graphMinutes={graphMinutes}
         setGraphMinutes={setGraphMinutes}
         cpuData={cpuData}

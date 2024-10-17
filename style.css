@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Aldrich', sans-serif;
+  src: url('./assets/Aldrich/Aldrich-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -35,6 +42,10 @@ h1 {
   line-height: 1.1;
 }
 
+h2 {
+  font-family: "Aldrich", sans-serif;
+}
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -46,25 +57,13 @@ h1 {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+  align-items: flex-start;
 }
 
 #paramBox {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .card {
@@ -96,12 +95,26 @@ button {
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+#settingsCard {
+  border: 1px solid red;
+  width: 400px;
+}
+
+#outerBox {
+  display: flex;
+  justify-content: space-between
+}
+
 #configButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   padding: 20px;
 }
 
@@ -115,23 +128,10 @@ button:focus-visible {
   border: 0;
 }
 
-/* #saveButton {
-  margin: 10px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #e8e3e3;
-  cursor: pointer;
-  transition: border-color 0.25s;
-} */
+#configContainer {
+  display: flex;
 
-/* #saveButton:hover {
-background-color: rgb(249, 249, 249);
-border-color: #696efa;
-} */
+}
 
 .graphs {
   width: 900px;
@@ -139,6 +139,7 @@ border-color: #696efa;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: space-between;
   /* background-color: #666565; */
 }
 
@@ -147,7 +148,6 @@ border-color: #696efa;
 }
 
 table {
-  margin-top: 25px;
   background-color: #363637;
   border: 0;
   border-radius: 8px;
@@ -161,48 +161,5 @@ th, td {
 tr:nth-child(odd) {
   background-color: #242424;
 }
-
-.heartbeat {
-  animation: heartbeat 1.5s infinite; 
-}
-
-@keyframes heartbeat {
-  0%, 100% {
-    transform: scale(0.9); 
-  }
-  15% {
-    transform: scale(1.1); 
-  }
-  30% {
-    transform: scale(1.0); 
-  }
-  45% {
-    transform: scale(1.1); 
-  }
-  60% {
-    transform: scale(0.9); 
-  }
-}
-
-
-/* .thead {
-  background-color: #242424;
-  color: #242424;
-  font-weight: 900;
-} */
-/*
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  } */
-/* }
-
 
 

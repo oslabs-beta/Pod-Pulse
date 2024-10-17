@@ -10,12 +10,22 @@ console.log('Prometheus Controller Running!');
 //eliminated global variables in case multiple requests come in rapidly
 let config = {
   cpu: {
+    label: 'cpu',
     threshold: 80,
     minutes: 30,
+    queryString: `
+  avg(rate(container_cpu_usage_seconds_total[30m])) by (pod, namespace)/
+  sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
+  `,
   },
   memory: {
+    label: 'memory',
     threshold: 80,
     minutes: 30,
+    queryString: `sum(avg_over_time(container_memory_usage_bytes[30m])) by (pod, namespace)
+    /
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
+    `,
   },
 };
 
@@ -40,8 +50,16 @@ configController.saveConfig = (req, res, next) => {
 
     config.cpu.threshold = cpu;
     config.cpu.minutes = cpuTimeFrame;
+    config.cpu.queryString = `
+  avg(rate(container_cpu_usage_seconds_total[${cpuTimeFrame}m])) by (pod, namespace)/
+  sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
+  `;
     config.memory.threshold = memory;
     config.memory.minutes = memTimeFrame;
+    config.memory.queryString = `sum(avg_over_time(container_memory_usage_bytes[${memTimeFrame}m])) by (pod, namespace)
+    /
+    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
+    `;
 
     res.locals.savedConfig = { ...config };
 
@@ -56,37 +74,42 @@ configController.saveConfig = (req, res, next) => {
     return next(err);
   }
 };
-//function used to query and get data from Prometheus using the user inputs from the frontend - asynchronous function w/ the user inputs Object Model as a parameter
-const queryPrometheus = async (label) => {
-  // console.log('In queryPrometheus');
 
-  const queryString =
-    label === 'cpu'
-      ? `
-  avg(rate(container_cpu_usage_seconds_total[${config.cpu.minutes}m])) by (pod, namespace)/
+const prometheusController = {};
+
+prometheusController.fetchGraphData = async (req, res, next) => {
+  try {
+    const graphMinutes = req.query.graphMinutes;
+    const cpuQuery = `
+  avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod, namespace)/
   sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
-  `
-      : `sum(avg_over_time(container_memory_usage_bytes[${config.memory.minutes}m])) by (pod, namespace)
+  `;
+    const memQuery = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod, namespace)
     /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
     `;
+    const cpuData = await queryPrometheus(cpuQuery);
+    const memData = await queryPrometheus(memQuery);
+    res.locals.data = { cpuData, memData };
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+};
 
-  // console.log(`LOOK HERE: ${memoryMinutes}`);
-  // the Url we will be querying Prometheus with
-  const encodedUrl = `${prometheusUrl}${encodeURIComponent(queryString)}`;
-  // promise that has a fetch request to Prometheus and the data is stored in the response variable as a string
-  const response = await fetch(encodedUrl);
-  //promise that jsonifies the reponse from Prometheus and stores the data in an javascript object format
-  const data = await response.json();
-  // we can now access a key on the returned object that is stored in data and if the status is strictly equal to the string 'success'
-  if (data.status === 'success') {
-    // returning an array with objects(pods) within the javascript data object
-    const results = data.data.result;
-    //// If demo'ing product, set runDemo variable to true and set demoPod to be the name of the pod you want to restart. Otherwise, set runDemo to false and this block of code will be skipped.
+// helper function to handle prometheus queries
+const queryPrometheus = async (queryStr) => {
+  try {
+    // the Url we will be querying Prometheus with
+    const encodedUrl = `${prometheusUrl}${encodeURIComponent(queryStr)}`;
+    // promise that has a fetch request to Prometheus and the data is stored in the response variable as a string
+    const response = await fetch(encodedUrl);
+    //promise that jsonifies the reponse from Prometheus and stores the data in an javascript object format
+    const data = await response.json();
     if (runDemo === true) {
       if (demoPod.length === 0)
         console.log('ERROR: server set to demo but no demo pod name entered');
-      for (const pod of results) {
+      for (const pod of data.data.result) {
         if (pod.metric.pod === demoPod) {
           pod.value[1] = 95 + Math.random() * 5;
         } else {
@@ -94,8 +117,37 @@ const queryPrometheus = async (label) => {
         }
       }
     }
+    return data;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
+//function used to check if pods need to be restarted. calls helper function to query prometheus
+const checkRestart = async (obj) => {
+  // console.log('In queryPrometheus');
+  const { threshold, queryString, label } = obj;
+  console.log(`LOOK HERE: ${queryString}`);
+  // define constant data as evaluated result of queryPrometheus function with argument encodedUrl
+  const data = await queryPrometheus(queryString);
+  // we can now access a key on the returned object that is stored in data and if the status is strictly equal to the string 'success'
+  if (data.status === 'success') {
+    // returning an array with objects(pods) within the javascript data object
+    const results = data.data.result;
+    //// If demo'ing product, set runDemo variable to true and set demoPod to be the name of the pod you want to restart. Otherwise, set runDemo to false and this block of code will be skipped.
+    // if (runDemo === true) {
+    //   if (demoPod.length === 0)
+    //     console.log('ERROR: server set to demo but no demo pod name entered');
+    //   for (const pod of results) {
+    //     if (pod.metric.pod === demoPod) {
+    //       pod.value[1] = 95 + Math.random() * 5;
+    //     } else {
+    //       pod.value[1] = Math.random() * 15;
+    //     }
+    //   }
+    // }
     console.log(`PromQL ${label} data array:`, results);
-    const threshold = config[label].threshold;
     // iterate through the result array and access the values within each object (which is a pod)
     results.forEach((pod) => {
       // console.log(`Pod ${label} data:`, pod.metric.pod, pod.value[1]);
@@ -128,11 +180,11 @@ const queryPrometheus = async (label) => {
   }
 };
 //function that invokes the queryPrometheus function, passing in cpuUsage, memoryUsage respectively
-const prometheusQueries = async () => {
-  await queryPrometheus('cpu');
-  await queryPrometheus('memory');
+const restartChecks = async () => {
+  await checkRestart(config.cpu);
+  await checkRestart(config.memory);
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
-setInterval(prometheusQueries, 1000 * 60 * callInterval);
+setInterval(restartChecks, 1000 * 60 * callInterval);
 // export the restartedPods Array and the configController
-module.exports = { restartedPods, configController };
+module.exports = { restartedPods, configController, prometheusController };

@@ -161,6 +161,12 @@ tr:nth-child(even) {
   color: #242424;
   font-weight: 900;
 }
+
+img {
+  filter: none; /* Remove any filter that may be applied */
+  opacity: 1; /* Ensure the opacity is set to full */
+}
+
 /*
 /* @media (prefers-color-scheme: light) {
   :root {
@@ -174,3 +180,4 @@ tr:nth-child(even) {
     background-color: #f9f9f9;
   } */
 /* }
+

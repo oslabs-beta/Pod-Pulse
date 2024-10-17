@@ -3,11 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
-import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
-import RestartedPodTable from '/client/components/restartedPodTable';
+import RestartedPodTable from './client/components/restartedPodTable';
+import fullLogo from './client/assets/fullLogo.png';
+import logoDesign from './client/assets/logoDesign.png';
+import logoName from './client/assets/logoName.png';
+import logoSlogan from './client/assets/logoSlogan.png';
 
 const App = () => {
   const [memory, setMemory] = useState(80);

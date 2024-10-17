@@ -40,12 +40,16 @@ const App = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(config),
+        // body: JSON.stringify(config),
       });
       if (!response.ok) {
         throw new Error('Failed to fetch graph data');
       }
       const result = await response.json();
+      setCpuData(result.cpuData.data.result);
+      setMemoryData(result.memData.data.result);
+
+
       console.log('Graph data fetched successfully:', result);
     } catch (error) {
       console.error('Error fetching graph data:', error);
@@ -93,8 +97,9 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    fetchMemoryData(graphMinutes);
-    fetchCpuData(graphMinutes);
+    queryChartData(graphMinutes);
+    // fetchMemoryData(graphMinutes);
+    // fetchCpuData(graphMinutes);
   }, [graphMinutes]);
 
   // SAMPLE CLIENT DATA:

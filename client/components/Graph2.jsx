@@ -8,14 +8,12 @@ Chart.register(...registerables);
 
 const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
   const [graphDisplay, setGraphDisplay] = useState(null);
-  const [graphTitleDisplay, setGraphTitleDisplay] = useState(
-    'No Graph to display!'
-  );
+  const [graphTitleDisplay, setGraphTitleDisplay] = useState('');
 
   //creates a mutable object to attach our graph to
   const chartRef = useRef(null);
 
-  const selectDisplay = (mins) => {
+  const handleSelectDisplay = (mins) => {
     console.log(`selectDisplay func setting display to ${mins} minutes!`);
     if (graphMinutes !== mins) {
       setGraphMinutes(mins);
@@ -101,65 +99,61 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes < 60) {
-      setGraphTitleDisplay(
-        `Average ${title} data over last ${graphMinutes} minutes`
-      );
-    } else if (graphMinutes === 60) {
-      setGraphTitleDisplay(
-        `Average ${title} data over last ${
-          graphMinutes / 60
-        } hour`
-      );
-    } else {
-      setGraphTitleDisplay(
-        `Average ${title} data over last ${
-          graphMinutes / 60
-        } hours`
-      );
-    }
   }, [graphMinutes, data, title]);
 
   return (
     <div>
-      <h2>{title}</h2>
-      <Typography variant='subtitle'>{graphTitleDisplay}</Typography>
+      <Typography variant='h5'>{`Average ${title}`}</Typography>
+      <div className='sliderContainer'>
+        <div className='tabs'>
+          <input
+            className='radio'
+            type='radio'
+            id={`radio-1-${title}`}
+            name={`tabs-${title}`}
+            checked={graphMinutes === 1440}
+            onChange={() => handleSelectDisplay(1440)}
+          />
+          <label htmlFor={`radio-1-${title}`} className='tab'>
+            24 Hours
+          </label>
+
+          <input
+            className='radio'
+            type='radio'
+            id={`radio-2-${title}`}
+            name={`tabs-${title}`}
+            checked={graphMinutes === 60}
+            onChange={() => handleSelectDisplay(60)}
+          />
+          <label htmlFor={`radio-2-${title}`} className='tab'>
+            1 Hour
+          </label>
+
+          <input
+            className='radio'
+            type='radio'
+            id={`radio-3-${title}`}
+            name={`tabs-${title}`}
+            checked={graphMinutes === 10}
+            onChange={() => handleSelectDisplay(10)}
+          />
+          <label htmlFor={`radio-3-${title}`} className='tab'>
+            10 Minutes
+          </label>
+
+          <span
+            className='graphSlider'
+            style={{
+              transform: `translateX(${
+                graphMinutes === 1440 ? 0 : graphMinutes === 60 ? 100 : 200
+              }%)`,
+            }}
+          ></span>
+        </div>
+      </div>
+      <Typography variant='subtitle1'>{graphTitleDisplay}</Typography>
       <canvas ref={chartRef} width='400' height='400'></canvas>
-      <form id='buttonForm'>
-        <Button
-          sx={{ color: '#242424', backgroundColor: '#adadad' }}
-          variant='contained'
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(1440);
-          }}
-        >
-          24 Hours
-        </Button>
-        <Button
-          sx={{ color: '#242424', backgroundColor: '#adadad' }}
-          variant='contained'
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(60);
-          }}
-        >
-          1 Hour
-        </Button>
-        <Button
-          sx={{ color: '#242424', backgroundColor: '#adadad' }}
-          variant='contained'
-          className='timeDisplay'
-          onClick={(e) => {
-            e.preventDefault();
-            selectDisplay(10);
-          }}
-        >
-          10 Minutes
-        </Button>
-      </form>
     </div>
   );
 };

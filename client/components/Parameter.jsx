@@ -3,9 +3,8 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import TimeInput from './TimeInput';
-import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
 
-const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
+const Parameter = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <Box className='sliderBox' sx={{ width: '300px' }}>
       <Typography variant='h6'>{`${metric} Usage (%)`}</Typography>
@@ -28,4 +27,4 @@ const Parameters = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   );
 };
 
-export default Parameters;
+export default Parameter;

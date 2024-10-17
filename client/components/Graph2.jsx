@@ -101,7 +101,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes < 60) {
+    if (graphMinutes <= 60) {
       setGraphTitleDisplay(
         `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
       );
@@ -143,7 +143,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(60);
+            selectDisplay(480);
           }}
         >
           1 Hour
@@ -154,7 +154,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(10);
+            selectDisplay(60);
           }}
         >
           10 Minutes

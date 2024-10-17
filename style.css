@@ -139,34 +139,34 @@ border-color: #696efa;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  /* background-color: #666565; */
+}
+
+#graphContain {
+  border-radius: 8px;
 }
 
 table {
   margin-top: 25px;
-}
-
-table, th, td {
-  border: 1px solid rgb(197, 197, 197);
+  background-color: #363637;
+  border: 0;
+  border-radius: 8px;
 }
 
 th, td {
-  color: #e8e3e3;
+  color: #adadad;
+  border: none;
 }
 
-tr:nth-child(even) {
-  background-color: rgb(55, 55, 55);
+tr:nth-child(odd) {
+  background-color: #242424;
 }
-.tableHead {
-  background-color: #e8e3e3;
+
+/* .thead {
+  background-color: #242424;
   color: #242424;
   font-weight: 900;
-}
-
-img {
-  filter: none; /* Remove any filter that may be applied */
-  opacity: 1; /* Ensure the opacity is set to full */
-}
-
+} */
 /*
 /* @media (prefers-color-scheme: light) {
   :root {

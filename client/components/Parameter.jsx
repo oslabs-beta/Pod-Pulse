@@ -3,7 +3,6 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import { Typography } from '@mui/material';
 import TimeInput from './TimeInput';
-import { Unstable_NumberInput as BaseNumberInput } from '@mui/base/Unstable_NumberInput';
 
 const Parameter = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (

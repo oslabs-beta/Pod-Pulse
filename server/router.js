@@ -14,6 +14,7 @@ const cors = require('cors');
 const {
   restartedPods,
   configController,
+  prometheusController,
 } = require('./controllers/prometheusController.js');
 // middleware that parses incoming requests into json format - makes it easy to work with the req body
 app.use(express.json());
@@ -31,7 +32,13 @@ app.get('/', (req, res) => {
 app.get('/restarted', (req, res) => {
   res.status(200).json(restartedPods);
 });
-
+app.get(
+  '/graphData',
+  prometheusController.fetchGraphData,
+  (req, res) => {
+    res.status(200).json('fill this in');
+  }
+);
 // post request from the config endpoint that will trigger the saveconfig middleware and send back the saved config object to the client with their settings
 app.post('/config', configController.saveConfig, (req, res) => {
   res.status(201).json(res.locals.savedConfig);

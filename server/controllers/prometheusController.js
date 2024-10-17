@@ -56,6 +56,17 @@ configController.saveConfig = (req, res, next) => {
     return next(err);
   }
 };
+
+const prometheusController = {};
+
+prometheusController.fetchGraphData = (req, res, next) => {
+  try {
+    const graphMinutes = req.query.graphMinutes;
+  } catch (err) {
+    return next(err);
+  }
+};
+
 //function used to query and get data from Prometheus using the user inputs from the frontend - asynchronous function w/ the user inputs Object Model as a parameter
 const queryPrometheus = async (label) => {
   // console.log('In queryPrometheus');
@@ -135,4 +146,4 @@ const prometheusQueries = async () => {
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(prometheusQueries, 1000 * 60 * callInterval);
 // export the restartedPods Array and the configController
-module.exports = { restartedPods, configController };
+module.exports = { restartedPods, configController, prometheusController };

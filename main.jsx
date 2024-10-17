@@ -28,14 +28,10 @@ const App = () => {
   const [graphMinutes, setGraphMinutes] = useState(60);
   const [restartedPods, setRestartedPods] = useState([]);
 
-  const newFunc = async (requestedData, graphMinutes) => {
+  const queryChartData = async (graphMinutes) => {
     try {
       //deconstructing to get values
-      const config = {
-        requestedData,
-        graphMinutes
-      };
-      const response = await fetch('http://localhost:3333/graphData', {
+      const response = await fetch(`http://localhost:3333/graphData?graphMinutes=${graphMinutes}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -88,9 +84,14 @@ const App = () => {
 
   useEffect(() => {
     // fetch restarted pods every 10 seconds
-    const intervalId = setInterval(fetchRestartedPods, 10000);
-    return () => clearInterval(intervalId);
+    const restartedPodIntervalId = setInterval(fetchRestartedPods, 10000);
+    return () => clearInterval(restartedPodIntervalId);
   }, []);
+
+  useEffect(() => {
+    const queryIntervalId = setInterval(queryChartData, 10000);
+    return () => clearInterval(queryIntervalId);
+  })
 
   useEffect(() => {
     fetchMemoryData(graphMinutes);

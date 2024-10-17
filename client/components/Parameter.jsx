@@ -7,9 +7,11 @@ import TimeInput from './TimeInput';
 const Parameter = ({ metric, onChange, value, timeFrame, onTimeChange }) => {
   return (
     <Box className='sliderBox' sx={{ width: '300px' }}>
-      <Typography variant='h6'>{`${metric} Usage (%)`}</Typography>
+      <span id='sliderTitle'> 
+        <h3>{`${metric} Usage (%)`}</h3>
+      </span>
       <Slider
-        sx={{ color: '#adadad', width: '150px' }}
+        sx={{ color: '#54abb4', width: '150px' }}
         defaultValue={50}
         aria-label='Small'
         valueLabelDisplay='auto'

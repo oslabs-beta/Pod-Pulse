@@ -45,7 +45,7 @@ const ParameterContainer = ({
         <Button
           sx={{
             color: '#242424',
-            backgroundColor: '#adadad',
+            backgroundColor: '#54abb4',
             borderRadius: '4px',
             '&:hover': {
               backgroundColor: '#54abb4',

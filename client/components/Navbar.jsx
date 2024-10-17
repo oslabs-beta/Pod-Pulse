@@ -20,8 +20,8 @@ function Navbar() {
         >
           <img
             src={logoDesign}
-            alt='Logo'
-            className='logo'
+            alt='PodPulse Logo'
+            className='logo heartbeat'
             style={{
               width: '40px',
               height: 'auto',
@@ -32,11 +32,10 @@ function Navbar() {
           />
           <img
             src={logoSlogan}
-            alt='Logo Slogan'
-            style={{
-              width: '500px',
-              height: 'auto',
-            }}
+            alt='PodPulse - Your DevOps Companion'
+            width='500px'
+            height='auto'
+            margin='0.5rem 1.0rem'
           />
 
           <Box sx={{ marginLeft: 'auto' }}>
@@ -47,6 +46,7 @@ function Navbar() {
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },
+                margin: '0px 10px',
               }}
             >
               Previous Configs
@@ -58,6 +58,7 @@ function Navbar() {
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },
+                margin: '0px 10px',
               }}
             >
               More Details
@@ -68,6 +69,7 @@ function Navbar() {
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },
+                margin: '0px 10px',
               }}
             >
               Login

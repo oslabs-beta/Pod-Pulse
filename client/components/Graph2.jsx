@@ -16,7 +16,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
   const chartRef = useRef(null);
 
   const selectDisplay = (mins) => {
-    console.log(`selectDisplay func setting display to ${mins} hours!`);
+    console.log(`selectDisplay func setting display to ${mins} minutes!`);
     if (graphMinutes !== mins) {
       setGraphMinutes(mins);
     }
@@ -76,12 +76,12 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           },
           y: {
             beginAtZero: true,
-            min: 0, // Set minimum value
-            max: 100, // Set maximum value
+            min: 0,
+            max: 100,
             ticks: {
-              stepSize: 10, // Set interval for ticks
+              stepSize: 10,
               callback: function (value) {
-                return value + '%'; // Display the tick values with % sign
+                return value + '%';
               },
             },
           },
@@ -101,28 +101,28 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes <= 60) {
+    if (graphMinutes < 60) {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
+        `Average ${title} data over last ${graphMinutes} minutes`
       );
     } else if (graphMinutes === 60) {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${
+        `Average ${title} data over last ${
           graphMinutes / 60
-        } hour!`
+        } hour`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${
+        `Average ${title} data over last ${
           graphMinutes / 60
-        } hours!`
+        } hours`
       );
     }
   }, [graphMinutes, data, title]);
 
   return (
     <div>
-      <Typography variant='h4'>{title}</Typography>
+      <h2>{title}</h2>
       <Typography variant='subtitle'>{graphTitleDisplay}</Typography>
       <canvas ref={chartRef} width='400' height='400'></canvas>
       <form id='buttonForm'>
@@ -143,7 +143,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(480);
+            selectDisplay(60);
           }}
         >
           1 Hour
@@ -154,7 +154,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
           className='timeDisplay'
           onClick={(e) => {
             e.preventDefault();
-            selectDisplay(60);
+            selectDisplay(10);
           }}
         >
           10 Minutes

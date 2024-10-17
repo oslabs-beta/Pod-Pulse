@@ -137,10 +137,10 @@ const App = () => {
       const result = await response.json();
       console.log('Configuration saved successfully:', result);
       setSavedConfiguration({
-        savedMemoryThreshold: result.memoryThreshold,
-        savedMemTimeFrame: result.memoryMinutes,
-        savedCpuThreshold: result.cpuThreshold,
-        savedCpuTimeFrame: result.cpuMinutes,
+        savedMemoryThreshold: result.memory.threshold,
+        savedMemTimeFrame: result.memory.minutes,
+        savedCpuThreshold: result.cpu.threshold,
+        savedCpuTimeFrame: result.cpu.minutes,
       });
       // error handler
     } catch (error) {
@@ -177,6 +177,7 @@ const App = () => {
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
         setMemTimeFrame={setMemTimeFrame}
+        savedConfiguration={savedConfiguration}
       />
       <GraphsContainer
         id='graphContain'

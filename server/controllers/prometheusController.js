@@ -18,9 +18,7 @@ const restartedPods = [];
 const prometheusController = {};
 
 prometheusController.fetchGraphData = async (req, res, next) => {
-  console.log(`in fetchGraphData`);
   try {
-
     const graphMinutes = req.query.graphMinutes;
     const cpuQuery = `
   avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod, namespace)/

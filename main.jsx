@@ -34,13 +34,11 @@ const App = () => {
 
   const queryChartData = async (graphMinutes) => {
     try {
-      //deconstructing to get values
       const response = await fetch(`http://localhost:3333/graphData?graphMinutes=${graphMinutes}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        // body: JSON.stringify(config),
       });
       if (!response.ok) {
         throw new Error('Failed to fetch graph data');

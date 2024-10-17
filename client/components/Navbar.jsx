@@ -42,7 +42,7 @@ function Navbar() {
             <Button
               variant='text'
               sx={{
-                color: '#ffffff',
+                color: '#adadad',
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },
@@ -54,7 +54,7 @@ function Navbar() {
             <Button
               variant='text'
               sx={{
-                color: '#ffffff',
+                color: '#adadad',
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },
@@ -65,7 +65,7 @@ function Navbar() {
             </Button>
             <Button
               sx={{
-                color: '#ffffff',
+                color: '#adadad',
                 '&:hover': {
                   backgroundColor: '#54abb4',
                 },

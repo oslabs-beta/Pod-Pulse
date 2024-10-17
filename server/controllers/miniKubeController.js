@@ -16,6 +16,7 @@ async function getPods() {
     console.log(`Error getting pods: ${err}`);
   }
 }
+
 // async function that deletes the specific pod using the two passed in arguments
 async function deletePod(podName, podNamespace) {
   console.log('Attempting to delete', podName)

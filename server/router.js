@@ -10,12 +10,14 @@ const PORT = 3333;
 const fs = require('fs');
 // importing cors package "Cross-Origin Resource Sharing" - allows server to handle requests from different localhosts (origins)
 const cors = require('cors');
-// destructure deletePods and configController from the prometheusController so that we can use it in this file
+// destructure restartedPods and configController from the prometheusController so that we can use it in this file
 const {
   restartedPods,
-  configController,
   prometheusController,
-} = require('./controllers/prometheusController.js');
+} = require('./controllers/prometheusController');
+
+const {configController} = require('./controllers/configController');
+
 // middleware that parses incoming requests into json format - makes it easy to work with the req body
 app.use(express.json());
 // middleware that parses url-encoded data and has us have rich objects and arrays

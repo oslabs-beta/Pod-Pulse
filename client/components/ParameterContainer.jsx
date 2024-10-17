@@ -1,9 +1,9 @@
 import React from 'react';
-import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
-import Parameters from './Slider';
+import Parameters from './Parameter';
+import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 
 
 const ParameterContainer = ({

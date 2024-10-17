@@ -8,7 +8,7 @@ import DataSaverOnIcon from '@mui/icons-material/DataSaverOn';
 
 const ParameterContainer = ({ handleSubmit, memory, setMemory, memTimeFrame, setMemTimeFrame, cpu, setCpu, cpuTimeFrame, setCpuTimeFrame }) => {
   return(
-    <>
+    <div id='configContainer'>
     <Box id='paramBox'>
       <Parameters
         metric='Memory'
@@ -23,7 +23,8 @@ const ParameterContainer = ({ handleSubmit, memory, setMemory, memTimeFrame, set
         timeFrame={cpuTimeFrame}
         onTimeChange={setCpuTimeFrame} />
     </Box>
-    <Box id='configButton'>
+    <div id='configButton'>
+    <Box>
       <Button
         sx={{color: '#242424', backgroundColor: '#adadad', borderRadius: '4px'}}
         variant='contained'
@@ -32,7 +33,8 @@ const ParameterContainer = ({ handleSubmit, memory, setMemory, memTimeFrame, set
         Save Config
       </Button>
     </Box>
-    </>
+    </div>
+    </div>
   )
 }
 

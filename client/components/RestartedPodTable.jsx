@@ -38,17 +38,16 @@ const RestartedPodTable = ({ restartedPods }) => {
   }
   return (
       <>
-      <h2>Restarted Pods</h2>
     <TableContainer className='tabContain' sx={{backgroundColor: '#242424' }} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead id='tblhd'>
           <StyledTableRow id='str'>
               <StyledTableCell>Pod Name</StyledTableCell>
-              <StyledTableCell>Time of Deletion</StyledTableCell>
-              <StyledTableCell>Pod Namespace</StyledTableCell>
-              <StyledTableCell>Metric Type</StyledTableCell>
-              <StyledTableCell>Metric at Restart</StyledTableCell>
-              <StyledTableCell>Restart Threshold</StyledTableCell>
+              <StyledTableCell>Time Deleted</StyledTableCell>
+              <StyledTableCell>Namespace</StyledTableCell>
+              <StyledTableCell>Metric</StyledTableCell>
+              <StyledTableCell>Restart</StyledTableCell>
+              <StyledTableCell>Threshold</StyledTableCell>
           </StyledTableRow>
         </TableHead>
         <TableBody>

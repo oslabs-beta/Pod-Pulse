@@ -16,7 +16,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
   const chartRef = useRef(null);
 
   const selectDisplay = (mins) => {
-    console.log(`selectDisplay func setting display to ${mins} hours!`);
+    console.log(`selectDisplay func setting display to ${mins} minutes!`);
     if (graphMinutes !== mins) {
       setGraphMinutes(mins);
     }
@@ -101,28 +101,28 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-    if (graphMinutes <= 60) {
+    if (graphMinutes < 60) {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${graphMinutes} minutes!`
+        `Average ${title} data over last ${graphMinutes} minutes`
       );
     } else if (graphMinutes === 60) {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${
+        `Average ${title} data over last ${
           graphMinutes / 60
-        } hour!`
+        } hour`
       );
     } else {
       setGraphTitleDisplay(
-        `Displaying Average ${title} data for the last ${
+        `Average ${title} data over last ${
           graphMinutes / 60
-        } hours!`
+        } hours`
       );
     }
   }, [graphMinutes, data, title]);
 
   return (
     <div>
-      <Typography variant='h4'>{title}</Typography>
+      <h2>{title}</h2>
       <Typography variant='subtitle'>{graphTitleDisplay}</Typography>
       <canvas ref={chartRef} width='400' height='400'></canvas>
       <form id='buttonForm'>

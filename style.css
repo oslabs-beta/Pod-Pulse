@@ -43,7 +43,7 @@ h1 {
 }
 
 h2 {
-  font-family: "Aldrich", sans-serif;
+  font-family: 'Aldrich', sans-serif;
 }
 
 #app {
@@ -108,7 +108,7 @@ button:focus-visible {
 
 #outerBox {
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 }
 
 #configButton {
@@ -130,7 +130,6 @@ button:focus-visible {
 
 #configContainer {
   display: flex;
-
 }
 
 .graphs {
@@ -153,7 +152,8 @@ table {
   border-radius: 8px;
 }
 
-th, td {
+th,
+td {
   color: #adadad;
   border: none;
 }
@@ -163,24 +163,25 @@ tr:nth-child(odd) {
 }
 
 .heartbeat {
-  animation: heartbeat 1.5s infinite; 
+  animation: heartbeat 1.5s infinite;
 }
 
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(0.9); 
+  0%,
+  100% {
+    transform: scale(0.9);
   }
   15% {
-    transform: scale(1.1); 
+    transform: scale(1.1);
   }
   30% {
-    transform: scale(1.0); 
+    transform: scale(1);
   }
   45% {
-    transform: scale(1.1); 
+    transform: scale(1.1);
   }
   60% {
-    transform: scale(0.9); 
+    transform: scale(0.9);
   }
 }
 
@@ -204,7 +205,6 @@ tr:nth-child(odd) {
 
 .tabs * {
   z-index: 4;
-
 }
 
 .radio {
@@ -228,15 +228,15 @@ tr:nth-child(odd) {
   color: #042100;
 }
 
-input[id=radio-1]:checked ~ .graphSlider {
+input[id='radio-1']:checked ~ .graphSlider {
   transform: translateX(0);
 }
 
-input[id=radio-2]:checked ~ .graphSlider {
+input[id='radio-2']:checked ~ .graphSlider {
   transform: translateX(150px); /* Match with tab width */
 }
 
-input[id=radio-3]:checked ~ .graphSlider {
+input[id='radio-3']:checked ~ .graphSlider {
   transform: translateX(300px); /* Match with tab width */
 }
 
@@ -274,7 +274,3 @@ input[id=radio-3]:checked ~ .graphSlider {
   button {
     background-color: #f9f9f9;
   } */
-
-
-
-

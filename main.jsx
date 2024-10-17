@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
-import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
@@ -162,6 +161,13 @@ const App = () => {
   return (
     <div>
       <Navbar />
+      <div style={{ textAlign: 'center', margin: '20px 0' }}>
+        <img
+          src={fullLogo}
+          alt='Logo'
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </div>
       <ParameterContainer
         handleSubmit={handleSubmit}
         memory={memory}

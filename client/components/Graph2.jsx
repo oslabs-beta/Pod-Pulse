@@ -32,20 +32,20 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
       pod: item.metric.pod,
       usage: parseFloat(item.value[1]),
     }));
-
+    // rgba(216,190,31,255)
     const sortedData = combinedData.sort((a, b) => a.pod.localeCompare(b.pod));
 
     const labels = sortedData.map((item) => item.pod);
     const cpuUsages = sortedData.map((item) => item.usage);
     const barColors = cpuUsages.map((value) => {
-      if (value >= 100) return 'rgba(255,0,0,0.2)';
-      else if (value >= 75) return 'rgba(255, 255, 0, 0.2)';
-      else return 'rgba(75, 192, 192, 0.2)';
+      if (value >= 100) return 'rgba(222, 55, 27, 0.4)';
+      else if (value >= 75) return 'rgba(216,190,31,0.4)';
+      else return 'rgba(84,171,180,0.4)';
     });
     const borderColors = cpuUsages.map((value) => {
-      if (value >= 100) return 'rgba(255,0,0,1.0)';
-      else if (value >= 75) return 'rgba(255,255, 0, 1.0)';
-      else return 'rgba(75, 192, 192, 1.0)';
+      if (value >= 100) return 'rgba(222, 55, 27, 1.0)';
+      else if (value >= 75) return 'rgba(216,190,31,1.0)';
+      else return 'rgba(84,171,180,1.0)';
     });
 
     // we are destroying the previous chart instance if it exists

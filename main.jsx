@@ -3,10 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
+import Navbar from './client/components/Navbar';
 import './style.css';
 import ParameterContainer from './client/components/ParameterContainer';
 import GraphsContainer from './client/components/GraphsContainer';
-import RestartedPodTable from '/client/components/RestartedPodTable';
+import RestartedPodTable from './client/components/restartedPodTable';
+import fullLogo from './client/assets/fullLogo.png';
+import logoDesign from './client/assets/logoDesign.png';
+import logoName from './client/assets/logoName.png';
+import logoSlogan from './client/assets/logoSlogan.png';
 
 const App = () => {
   //State to configure frontend parameters
@@ -33,7 +38,7 @@ const App = () => {
       //deconstructing to get values
       const config = {
         requestedData,
-        graphMinutes
+        graphMinutes,
       };
       const response = await fetch('http://localhost:3333/graphData', {
         method: 'GET',

@@ -42,7 +42,7 @@ const RestartedPodTable = ({ restartedPods }) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead id='tblhd'>
           <StyledTableRow id='str'>
-              <StyledTableCell>Pod Name</StyledTableCell>
+              <StyledTableCell>Restarted Pod</StyledTableCell>
               <StyledTableCell>Time Deleted</StyledTableCell>
               <StyledTableCell>Namespace</StyledTableCell>
               <StyledTableCell>Metric</StyledTableCell>

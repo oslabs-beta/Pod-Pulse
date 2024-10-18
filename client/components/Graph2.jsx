@@ -103,7 +103,7 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
 
   return (
     <div>
-      <Typography variant='h5'>{`Average ${title}`}</Typography>
+      <h2 variant='h5'>{`Average ${title}`}</h2>
       <div className='sliderContainer'>
         <div className='tabs'>
           <input

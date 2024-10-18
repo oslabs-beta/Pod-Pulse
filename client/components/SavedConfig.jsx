@@ -6,13 +6,15 @@ const SavedConfig = ({ savedConfiguration }) => {
 
     console.log('making saved config table: ', savedConfiguration)
   return (
-    <div>
-      Current saved configuration:
-      <div>Max memory usage: {savedMemoryThreshold}</div>
-      <div>Time frame: {savedMemTimeFrame}</div>
-      <div>Max cpu usage: {savedCpuThreshold}</div>
-      <div>Time frame: {savedCpuTimeFrame}</div>
-    </div>
+    <><h2>
+      Current saved configuration
+    </h2>
+    <list>
+        <li>Max memory usage: {savedMemoryThreshold}</li>
+        <li>Time frame: {savedMemTimeFrame}</li>
+        <li>Max cpu usage: {savedCpuThreshold}</li>
+        <li>Time frame: {savedCpuTimeFrame}</li>
+      </list></>
   );
 };
 

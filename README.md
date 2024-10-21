@@ -25,7 +25,7 @@ visualizations with Grafana..
    following commands in your home directory:
    1. `minikube start`
    2. ```
-      helm repo add prometheus-community\
+      helm repo add prometheus-community
       https://prometheus-community.github.io/helm-charts
       helm repo add stable https://charts.helm.sh/stable
       helm repo update

@@ -117,17 +117,14 @@ const App = () => {
   const memoryGraphMinutesRef = useRef(memoryGraphMinutes);
 
   useEffect(() => {
-    // Update refs whenever state changes
     cpuGraphMinutesRef.current = cpuGraphMinutes;
     memoryGraphMinutesRef.current = memoryGraphMinutes;
   }, [cpuGraphMinutes, memoryGraphMinutes]);
 
   useEffect(() => {
-    // Fetch both data on initial mount
     queryCpuData(cpuGraphMinutes);
     queryMemoryData(memoryGraphMinutes);
 
-    // Set interval for refreshing data every 60 seconds
     const intervalId = setInterval(() => {
       queryCpuData(cpuGraphMinutesRef.current);
       queryMemoryData(memoryGraphMinutesRef.current);
@@ -190,18 +187,15 @@ const App = () => {
         savedCpuThreshold: result.cpu.threshold,
         savedCpuTimeFrame: result.cpu.minutes,
       });
-      // error handler
     } catch (error) {
       console.error('Error sending configuration:', error);
     }
   };
 
-  //function that runs when we click the submit button
   const handleSubmit = () => {
     console.log(`Memory: ${memory}, TimeFrame: ${memTimeFrame}`);
     console.log(`CPU: ${cpu}, TimeFrame: ${cpuTimeFrame}`);
     console.log({ memory, memTimeFrame, cpu, cpuTimeFrame });
-    //invoke the set configuration function passing in the client submitted fields
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
@@ -225,7 +219,6 @@ const App = () => {
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
         setMemTimeFrame={setMemTimeFrame}
-        savedConfiguration={savedConfiguration}
         savedConfiguration={savedConfiguration}
       />
       <GraphsContainer

@@ -4,17 +4,6 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-<<<<<<< HEAD
-    "back:start": "nodemon ./server/router.js",
-    "dev": "concurrently \"nodemon ./server/router.js\" \"vite\"",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "jest"
-  },
-  "devDependencies": {
-    "concurrently": "^9.0.1",
-    "jest": "^29.7.0",
-=======
     "start": "concurrently \"nodemon ./server/router.js\" \"webpack serve --open\"",
     "dev": "webpack serve",
     "build": "webpack serve --open"
@@ -22,7 +11,6 @@
   "devDependencies": {
     "concurrently": "^9.0.1",
     "file-loader": "^6.2.0",
->>>>>>> origin/dev
     "nodemon": "^3.1.7",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4"

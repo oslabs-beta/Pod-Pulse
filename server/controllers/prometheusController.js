@@ -82,11 +82,15 @@ const checkRestart = async (obj) => {
   }
 };
 // console.log(`line 186: ${JSON.stringify(config)}`);
-//function that invokes the queryPrometheus function, passing in cpuUsage, memoryUsage respectively
+
+//function that invokes the checkRestart function, passing in cpuUsage, memoryUsage respectively
 
 const restartChecks = async (configObj) => {
-  await checkRestart(configObj.cpu);
-  await checkRestart(configObj.memory);
+  // invoke Promise.all and pass in the function invocations with arguments in the order it needs to be run in an array
+  await Promise.all([
+    checkRestart(configObj.cpu),
+    checkRestart(configObj.memory),
+  ]);
 };
 //setInterval function to run the entire code above and query the Prometheus DB every 'x' minutes
 setInterval(() => restartChecks(config.config), 1000 * 60 * callInterval);

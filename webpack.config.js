@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './main.jsx',
@@ -43,7 +44,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(png|jpeg|gif|svg|ttf)$/i,
+        test: /\.(png|jpeg|gif|svg)$/i,
         type: 'asset/resource'
       },
       {
@@ -79,6 +80,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html',
+      favicon: './client/assets/logoDesignFavicon.png'
     }),
   ],
   resolve: {

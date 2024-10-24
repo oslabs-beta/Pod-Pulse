@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon ./server/router.js",
-    "dev": "npm run dev",
+    "start": "concurrently \"nodemon ./server/router.js\" \"webpack serve --open\"",
+    "dev": "webpack serve",
     "build": "webpack serve --open"
   },
   "devDependencies": {

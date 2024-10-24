@@ -185,6 +185,10 @@ const App = () => {
         savedMemTimeFrame: result.memory.minutes,
         savedCpuThreshold: result.cpu.threshold,
         savedCpuTimeFrame: result.cpu.minutes,
+        savedMemoryThreshold: result.memory.threshold,
+        savedMemTimeFrame: result.memory.minutes,
+        savedCpuThreshold: result.cpu.threshold,
+        savedCpuTimeFrame: result.cpu.minutes,
       });
       // error handler
     } catch (error) {
@@ -221,6 +225,7 @@ const App = () => {
         cpuTimeFrame={cpuTimeFrame}
         setCpuTimeFrame={setCpuTimeFrame}
         setMemTimeFrame={setMemTimeFrame}
+        savedConfiguration={savedConfiguration}
         savedConfiguration={savedConfiguration}
       />
       <GraphsContainer

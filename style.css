@@ -13,6 +13,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Aldrich', sans-serif;
+  src: url('./client/assets/Aldrich/Aldrich-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -33,6 +40,17 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: #adadad;
+}
+
+h2 {
+  font-family: 'Aldrich', sans-serif;
+  color: #adadad;
+}
+
+h3 {
+  font-family: 'Aldrich', sans-serif;
+  color: #adadad;
 }
 
 #app {
@@ -42,10 +60,22 @@ h1 {
   text-align: center;
 }
 
+#sliderTitle {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin: 0;
+}
+
 .sliderBox {
-  padding: 20px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+}
+
+#timeInput {
+  display: flex;
   align-items: center;
 }
 
@@ -64,7 +94,15 @@ h1 {
 
 #paramBox {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+li {
+  text-align: left;
+  margin-left: 25px;
+  font-family: 'Aldrich';
+  color: #adadad;
 }
 
 .card {
@@ -96,12 +134,29 @@ button {
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+#settingsCard {
+  border: 0;
+  border-radius: 8px;
+  background-color: #363637;
+  width: 400px;
+  filter: drop-shadow(1px 1px 1px #1e1d1d);
+}
+
+#outerBox {
+  display: flex;
+  justify-content: space-between;
+}
+
 #configButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   padding: 20px;
 }
 
@@ -109,29 +164,15 @@ button:focus-visible {
   margin-top: 8px;
   padding: 5px;
   border-radius: 4px;
-  background-color: #adadad;
+  background-color: #242424;
   height: 25px;
   text-align: center;
   border: 0;
 }
 
-/* #saveButton {
-  margin: 10px;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #e8e3e3;
-  cursor: pointer;
-  transition: border-color 0.25s;
-} */
-
-/* #saveButton:hover {
-background-color: rgb(249, 249, 249);
-border-color: #696efa;
-} */
+#configContainer {
+  display: flex;
+}
 
 .graphs {
   width: 900px;
@@ -139,6 +180,8 @@ border-color: #696efa;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: space-between;
+  margin-bottom: 20px;
   /* background-color: #666565; */
 }
 
@@ -147,13 +190,13 @@ border-color: #696efa;
 }
 
 table {
-  margin-top: 25px;
   background-color: #363637;
   border: 0;
   border-radius: 8px;
 }
 
-th, td {
+th,
+td {
   color: #adadad;
   border: none;
 }
@@ -163,24 +206,25 @@ tr:nth-child(odd) {
 }
 
 .heartbeat {
-  animation: heartbeat 1.5s infinite; 
+  animation: heartbeat 1.5s infinite;
 }
 
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(0.9); 
+  0%,
+  100% {
+    transform: scale(0.9);
   }
   15% {
-    transform: scale(1.1); 
+    transform: scale(1.1);
   }
   30% {
-    transform: scale(1.0); 
+    transform: scale(1);
   }
   45% {
-    transform: scale(1.1); 
+    transform: scale(1.1);
   }
   60% {
-    transform: scale(0.9); 
+    transform: scale(0.9);
   }
 }
 
@@ -227,15 +271,15 @@ tr:nth-child(odd) {
   color: #042100;
 }
 
-input[id=radio-1]:checked ~ .graphSlider {
+input[id='radio-1']:checked ~ .graphSlider {
   transform: translateX(0);
 }
 
-input[id=radio-2]:checked ~ .graphSlider {
+input[id='radio-2']:checked ~ .graphSlider {
   transform: translateX(150px); /* Match with tab width */
 }
 
-input[id=radio-3]:checked ~ .graphSlider {
+input[id='radio-3']:checked ~ .graphSlider {
   transform: translateX(300px); /* Match with tab width */
 }
 
@@ -273,7 +317,3 @@ input[id=radio-3]:checked ~ .graphSlider {
   button {
     background-color: #f9f9f9;
   } */
-/* }
-
-
-

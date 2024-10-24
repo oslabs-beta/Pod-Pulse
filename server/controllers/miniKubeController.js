@@ -1,3 +1,4 @@
+// kubernetes API connection to read/write pod data
 const k8s = require('@kubernetes/client-node');
 
 //points to the config file for your cluster that contains the endpoint URL and authorization

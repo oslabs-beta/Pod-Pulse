@@ -114,7 +114,7 @@ const Graph = ({
 
   return (
     <div>
-      <Typography variant='h5'>{`Average ${title}`}</Typography>
+      <h2 variant='h5'>{`Average ${title}`}</h2>
       <div className='sliderContainer'>
         <div className='tabs'>
           {[1440, 60, 10].map((mins) => (

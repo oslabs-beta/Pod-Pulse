@@ -1,6 +1,6 @@
 // LEAVE IN ROOT FOR VITE
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import Navbar from './client/components/Navbar';
 import './style.css';
@@ -29,24 +29,26 @@ const App = () => {
   //State for graph displays
   const [memoryData, setMemoryData] = useState([]);
   const [cpuData, setCpuData] = useState([]);
-  const [graphMinutes, setGraphMinutes] = useState(60);
+  const [cpuGraphMinutes, setCpuGraphMinutes] = useState(60);
+  const [memoryGraphMinutes, setMemoryGraphMinutes] = useState(60);
   const [restartedPods, setRestartedPods] = useState([]);
 
-  const queryChartData = async (graphMinutes) => {
+  const queryCpuData = async (minutes) => {
     try {
-      const response = await fetch(`http://localhost:3333/graphData?graphMinutes=${graphMinutes}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await fetch(
+        `http://localhost:3333/graphData?cpuGraphMinutes=${minutes}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch graph data');
       }
       const result = await response.json();
       setCpuData(result.cpuData.data.result);
-      setMemoryData(result.memData.data.result);
-
 
       console.log('Graph data fetched successfully:', result);
     } catch (error) {
@@ -54,31 +56,54 @@ const App = () => {
     }
   };
 
-  //fetch memory data to be displayed in graph
-  const fetchMemoryData = async () => {
-    const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
-    /
-    sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
-    `;
-    const res = await fetch(
-      `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
-    );
-    const data = await res.json();
-    setMemoryData(data.data.result);
+  const queryMemoryData = async (minutes) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3333/graphData?memoryGraphMinutes=${minutes}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error('Failed to fetch graph data');
+      }
+      const result = await response.json();
+      setMemoryData(result.memData.data.result);
+
+      console.log('Graph data fetched successfully:', result);
+    } catch (error) {
+      console.error('Error fetching graph data:', error);
+    }
   };
 
-  //fetch cpu data to be displayed in graph
-  const fetchCpuData = async () => {
-    const query = `
-    avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
-    sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
-    `;
-    const res = await fetch(
-      `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
-    );
-    const data = await res.json();
-    setCpuData(data.data.result);
-  };
+  // //fetch memory data to be displayed in graph
+  // const fetchMemoryData = async () => {
+  //   const query = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod)
+  //   /
+  //   sum(kube_pod_container_resource_requests{resource="memory"}) by (pod) * 100
+  //   `;
+  //   const res = await fetch(
+  //     `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
+  //   );
+  //   const data = await res.json();
+  //   setMemoryData(data.data.result);
+  // };
+
+  // //fetch cpu data to be displayed in graph
+  // const fetchCpuData = async () => {
+  //   const query = `
+  //   avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod)/
+  //   sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod) * 100
+  //   `;
+  //   const res = await fetch(
+  //     `http://localhost:9090/api/v1/query?query=${encodeURIComponent(query)}`
+  //   );
+  //   const data = await res.json();
+  //   setCpuData(data.data.result);
+  // };
 
   const fetchRestartedPods = async () => {
     const res = await fetch('http://localhost:3333/restarted');
@@ -88,17 +113,33 @@ const App = () => {
     setRestartedPods(restartedPods);
   };
 
+  const cpuGraphMinutesRef = useRef(cpuGraphMinutes);
+  const memoryGraphMinutesRef = useRef(memoryGraphMinutes);
+
   useEffect(() => {
-    // fetch restarted pods every 10 seconds
-    const restartedPodIntervalId = setInterval(fetchRestartedPods, 10000);
-    return () => clearInterval(restartedPodIntervalId);
+    cpuGraphMinutesRef.current = cpuGraphMinutes;
+    memoryGraphMinutesRef.current = memoryGraphMinutes;
+  }, [cpuGraphMinutes, memoryGraphMinutes]);
+
+  useEffect(() => {
+    queryCpuData(cpuGraphMinutes);
+    queryMemoryData(memoryGraphMinutes);
+
+    const intervalId = setInterval(() => {
+      queryCpuData(cpuGraphMinutesRef.current);
+      queryMemoryData(memoryGraphMinutesRef.current);
+    }, 60000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
-    queryChartData(graphMinutes);
-    // fetchMemoryData(graphMinutes);
-    // fetchCpuData(graphMinutes);
-  }, [graphMinutes]);
+    queryMemoryData(memoryGraphMinutes);
+  }, [memoryGraphMinutes]);
+
+  useEffect(() => {
+    queryCpuData(cpuGraphMinutes);
+  }, [cpuGraphMinutes]);
 
   // SAMPLE CLIENT DATA:
   // {
@@ -141,19 +182,20 @@ const App = () => {
         savedMemTimeFrame: result.memory.minutes,
         savedCpuThreshold: result.cpu.threshold,
         savedCpuTimeFrame: result.cpu.minutes,
+        savedMemoryThreshold: result.memory.threshold,
+        savedMemTimeFrame: result.memory.minutes,
+        savedCpuThreshold: result.cpu.threshold,
+        savedCpuTimeFrame: result.cpu.minutes,
       });
-      // error handler
     } catch (error) {
       console.error('Error sending configuration:', error);
     }
   };
 
-  //function that runs when we click the submit button
   const handleSubmit = () => {
     console.log(`Memory: ${memory}, TimeFrame: ${memTimeFrame}`);
     console.log(`CPU: ${cpu}, TimeFrame: ${cpuTimeFrame}`);
     console.log({ memory, memTimeFrame, cpu, cpuTimeFrame });
-    //invoke the set configuration function passing in the client submitted fields
     setConfiguration(memory, memTimeFrame, cpu, cpuTimeFrame);
   };
 
@@ -181,10 +223,14 @@ const App = () => {
       />
       <GraphsContainer
         id='graphContain'
-        graphMinutes={graphMinutes}
-        setGraphMinutes={setGraphMinutes}
+        cpuGraphMinutes={cpuGraphMinutes}
+        memoryGraphMinutes={memoryGraphMinutes}
+        setCpuGraphMinutes={setCpuGraphMinutes}
+        setMemoryGraphMinutes={setMemoryGraphMinutes}
         cpuData={cpuData}
         memoryData={memoryData}
+        queryCpuData={queryCpuData}
+        queryMemoryData={queryMemoryData}
       />
       {restartedPods.length > 0 ? (
         <RestartedPodTable restartedPods={restartedPods} />

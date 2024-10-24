@@ -49,7 +49,7 @@ h2 {
 }
 
 h3 {
-  font-family: "Aldrich", sans-serif;
+  font-family: 'Aldrich', sans-serif;
   color: #adadad;
 }
 
@@ -77,13 +77,19 @@ h3 {
 #timeInput {
   display: flex;
   align-items: center;
-  color: #adadad;
 }
 
-#timeInputLabel {
-  display: flex;
-  align-items: center;
-  color: #adadad;
+.logo {
+  height: 6em;
+  padding: 0.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.vanilla:hover {
+  filter: drop-shadow(0 0 2em #f7df1eaa);
 }
 
 #paramBox {

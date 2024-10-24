@@ -5,7 +5,7 @@ const fetch = require('node-fetch');
 const prometheusUrl = 'http://localhost:9090/api/v1/query?query=';
 
 // variable that can be changed to tell function in queryPrometheus query whether we're demo'ing
-const runDemo = true;
+const runDemo = false;
 // name of pod to be restarted if running demo
 const demoPod = 'kube-apiserver-minikube';
 

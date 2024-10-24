@@ -15,7 +15,7 @@
 
 @font-face {
   font-family: 'Aldrich', sans-serif;
-  src: url('./assets/Aldrich/Aldrich-Regular.ttf');
+  src: url('./client/assets/Aldrich/Aldrich-Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }

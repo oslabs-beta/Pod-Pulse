@@ -18,28 +18,13 @@ module.exports = {
       directory: path.resolve(__dirname, 'build'),
       publicPath: '/'
     },
-    proxy: [
-      {
-        context: ['/'],
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
-      {
-        context: ['/restarted'],
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
-      {
-        context: ['/graphData'],
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
-      {
-        context: ['/config'],
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
-    ],
+    // proxy: [
+    //   {
+    //     context: ['/', '/restarted', '/graphData', '/config'],
+    //     target: 'http://localhost:3333/',
+    //     secure: false,
+    //   },
+    // ],
   },
   module: {
     rules: [

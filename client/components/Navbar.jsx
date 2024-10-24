@@ -25,7 +25,7 @@ function Navbar() {
             style={{
               width: '40px',
               height: 'auto',
-              margin: '0.5rem 1.0rem',
+              margin: '0.5rem 0.5rem',
               transition: 'filter 0.3s',
               filter: 'grayscale(10%)',
             }}

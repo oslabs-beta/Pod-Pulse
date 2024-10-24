@@ -51,7 +51,7 @@ h1 {
 
 .logo {
   height: 6em;
-  padding: 1.5em;
+  padding: 0.5em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -196,7 +196,7 @@ tr:nth-child(odd) {
 .tabs {
   display: flex;
   position: relative;
-  background: white;
+  background: black;
   padding: 8px; /* Adjust padding for a better fit */
   border-radius: 40px; /* Adjusted for a smaller radius */
   box-shadow: 0 6px 12px 0 rgba(24, 94, 224, 0.15);

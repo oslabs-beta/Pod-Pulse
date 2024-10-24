@@ -19,18 +19,28 @@ const prometheusController = {};
 
 prometheusController.fetchGraphData = async (req, res, next) => {
   try {
-    const graphMinutes = req.query.graphMinutes;
-    const cpuQuery = `
-  avg(rate(container_cpu_usage_seconds_total[${graphMinutes}m])) by (pod, namespace)/
-  sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
-  `;
-    const memQuery = `sum(avg_over_time(container_memory_usage_bytes[${graphMinutes}m])) by (pod, namespace)
+    const cpuGraphMinutes = req.query.cpuGraphMinutes;
+    const memoryGraphMinutes = req.query.memoryGraphMinutes;
+
+    let cpuData, memData;
+
+    if (cpuGraphMinutes) {
+      const cpuQuery = `
+      avg(rate(container_cpu_usage_seconds_total[${cpuGraphMinutes}m])) by (pod, namespace)/
+      sum(kube_pod_container_resource_requests{resource="cpu"}) by (pod, namespace) * 100
+      `;
+      cpuData = await queryPrometheus(cpuQuery);
+      res.locals.data = { cpuData };
+    }
+    if (memoryGraphMinutes) {
+      const memQuery = `sum(avg_over_time(container_memory_usage_bytes[${memoryGraphMinutes}m])) by (pod, namespace)
     /
     sum(kube_pod_container_resource_requests{resource="memory"}) by (pod, namespace) * 100
     `;
-    const cpuData = await queryPrometheus(cpuQuery);
-    const memData = await queryPrometheus(memQuery);
-    res.locals.data = { cpuData, memData };
+      memData = await queryPrometheus(memQuery);
+      res.locals.data = { memData };
+    }
+
     return next();
   } catch (err) {
     return next(err);

@@ -1,26 +1,45 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Graph from './Graph2'
+import Graph from './Graph2';
 import { Chart, registerables } from 'chart.js';
 import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 
-const GraphsContainer = ({ graphMinutes, setGraphMinutes, cpuData, memoryData }) => {
-  return(
+const GraphsContainer = ({
+  cpuGraphMinutes,
+  memoryGraphMinutes,
+  setCpuGraphMinutes,
+  setMemoryGraphMinutes,
+  cpuData,
+  memoryData,
+  queryCpuData,
+  queryMemoryData,
+}) => {
+  const handleCpuSliderChange = (mins) => {
+    setCpuGraphMinutes(mins);
+    queryCpuData(mins);
+  };
+
+  const handleMemorySliderChange = (mins) => {
+    setMemoryGraphMinutes(mins);
+    queryMemoryData(mins);
+  };
+
+  return (
     <div className='graphs'>
       <Graph
         title='Memory Usage'
-        graphMinutes={graphMinutes}
-        setGraphMinutes={setGraphMinutes}
+        memoryGraphMinutes={memoryGraphMinutes}
+        setMemoryGraphMinutes={handleMemorySliderChange}
         data={memoryData}
       />
       <Graph
         title='CPU Usage'
-        graphMinutes={graphMinutes}
-        setGraphMinutes={setGraphMinutes}
+        cpuGraphMinutes={cpuGraphMinutes}
+        setCpuGraphMinutes={handleCpuSliderChange}
         data={cpuData}
       />
     </div>
   );
 };
-// Must switch to flex-end for justification
+
 export default GraphsContainer;

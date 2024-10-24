@@ -6,7 +6,14 @@ import { Typography } from '@mui/material';
 //registering all default components that may be used to create the graph but once we know exactly what we will use we can specify them directly to make it more optimized
 Chart.register(...registerables);
 
-const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
+const Graph = ({
+  title,
+  cpuGraphMinutes,
+  memoryGraphMinutes,
+  setCpuGraphMinutes,
+  setMemoryGraphMinutes,
+  data,
+}) => {
   const [graphDisplay, setGraphDisplay] = useState(null);
   const [graphTitleDisplay, setGraphTitleDisplay] = useState('');
 
@@ -14,9 +21,13 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
   const chartRef = useRef(null);
 
   const handleSelectDisplay = (mins) => {
-    console.log(`selectDisplay func setting display to ${mins} minutes!`);
-    if (graphMinutes !== mins) {
-      setGraphMinutes(mins);
+    console.log(
+      `selectDisplay func setting display to ${mins} minutes for ${title}!`
+    );
+    if (title === 'CPU Usage') {
+      setCpuGraphMinutes(mins);
+    } else if (title === 'Memory Usage') {
+      setMemoryGraphMinutes(mins);
     }
   };
 
@@ -99,54 +110,49 @@ const Graph = ({ title, graphMinutes, setGraphMinutes, data }) => {
     });
 
     setGraphDisplay(newGraphDisplay);
-  }, [graphMinutes, data, title]);
+  }, [data, title]);
 
   return (
     <div>
       <Typography variant='h5'>{`Average ${title}`}</Typography>
       <div className='sliderContainer'>
         <div className='tabs'>
-          <input
-            className='radio'
-            type='radio'
-            id={`radio-1-${title}`}
-            name={`tabs-${title}`}
-            checked={graphMinutes === 1440}
-            onChange={() => handleSelectDisplay(1440)}
-          />
-          <label htmlFor={`radio-1-${title}`} className='tab'>
-            24 Hours
-          </label>
-
-          <input
-            className='radio'
-            type='radio'
-            id={`radio-2-${title}`}
-            name={`tabs-${title}`}
-            checked={graphMinutes === 60}
-            onChange={() => handleSelectDisplay(60)}
-          />
-          <label htmlFor={`radio-2-${title}`} className='tab'>
-            1 Hour
-          </label>
-
-          <input
-            className='radio'
-            type='radio'
-            id={`radio-3-${title}`}
-            name={`tabs-${title}`}
-            checked={graphMinutes === 10}
-            onChange={() => handleSelectDisplay(10)}
-          />
-          <label htmlFor={`radio-3-${title}`} className='tab'>
-            10 Minutes
-          </label>
-
+          {[1440, 60, 10].map((mins) => (
+            <div key={mins}>
+              <input
+                className='radio'
+                type='radio'
+                id={`radio-${mins}-${title}`}
+                name={`tabs-${title}`}
+                checked={
+                  (title === 'CPU Usage'
+                    ? cpuGraphMinutes
+                    : memoryGraphMinutes) === mins
+                }
+                onChange={() => handleSelectDisplay(mins)}
+              />
+              <label htmlFor={`radio-${mins}-${title}`} className='tab'>
+                {mins === 1440
+                  ? '24 Hours'
+                  : mins === 60
+                  ? '1 Hour'
+                  : '10 Minutes'}
+              </label>
+            </div>
+          ))}
           <span
             className='graphSlider'
             style={{
               transform: `translateX(${
-                graphMinutes === 1440 ? 0 : graphMinutes === 60 ? 100 : 200
+                (title === 'CPU Usage'
+                  ? cpuGraphMinutes
+                  : memoryGraphMinutes) === 1440
+                  ? 0
+                  : (title === 'CPU Usage'
+                      ? cpuGraphMinutes
+                      : memoryGraphMinutes) === 60
+                  ? 100
+                  : 200
               }%)`,
             }}
           ></span>
